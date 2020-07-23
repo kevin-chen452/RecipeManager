@@ -1,11 +1,10 @@
 # Block Breaker Blast!
 
-## Project Proposal
+## Kevin Chen
 
-This application will launch a game, where people control a paddle to bounce a ball off of, and this ball
-will bounce around and break blocks that appear. There will be different features and modes that can be 
-customized and chosen by the user to change things up, as it will likely become repetitive if there is only 
-one mode to play the game in.
+This application will launch a game where people control a paddle to bounce a ball off of, and this ball
+will bounce around and break blocks that appear. When playing this game, various tips and life advice will be displayed
+to the user, most often before and after a game. 
 
 There are many audiences in mind, but generally. I think that these people will use it:
 - people who enjoy video games
@@ -19,10 +18,11 @@ as a kid. So I want to relive my childhood to an extent, by making a block break
 
 ## User Stories
 
-- As a user, I want to be able to control a paddle that bounces a ball that breaks blocks on a fixed, introductory
-level
 - As a user, I want to be able to change the colour of my paddle and balls before a game
-- As a user, I want to be able to pause, restart, exit to main menu, and quit, in a game
-- As a user, I want to be able to unlock and earn achievements
-- As a user, I want to be able to play a custom mode, where I can customize the ball, the paddle, and the blocks
+- As a user, I want to be able to select a difficulty: easy, medium, or hard
 - As a user, I want to be able to add power-ups to a selection of power-ups I can activate at any time
+- As a user, I want to be able to receive "game tips" before starting a game
+- As a user, I want to be able to remove and add my own game tips to a quote bank, one of which can be displayed before
+starting a game, or when browsing game tips
+
+
