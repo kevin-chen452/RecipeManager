@@ -1,28 +1,26 @@
-# Block Breaker Blast!
+# Recipe Manager
 
 ## Kevin Chen
 
-This application will launch a game where people control a paddle to bounce a ball off of, and this ball
-will bounce around and break blocks that appear. When playing this game, various tips and life advice will be displayed
-to the user, most often before and after a game. 
+This application will launch an application that allows the user to keep track of their recipes. They will be able to 
+do things such as adding and removing recipes, viewing their current recipes, and much more. 
 
 There are many audiences in mind, but generally. I think that these people will use it:
-- people who enjoy video games
-- people who need some **fun** in their boring lives
-- people needing a break from the reality that is life
-- myself
+- people who enjoy cooking
+- people who have friends or family that enjoy cooking
+- **myself**
 
-This project is of interest to me, because I personally fit all four of the criteria mentioned above. In addition
-to that, I think block breaker games have been a bit forgotten nowadays, which is sad, because I loved playing them
-as a kid. So I want to relive my childhood to an extent, by making a block breaker game myself, and making it shine.
+This project is of interest to me, because I personally fit all of the criteria mentioned above. In addition
+to that, I think it will be really nice to have a recipe manager right here on my desktop. As well, by making this
+application myself, this means I can customize it to my needs, and potentially add new features in the long term,
+beyond these two months.
 
 ## User Stories
 
-- As a user, I want to be able to change the colour of my paddle and balls before a game
-- As a user, I want to be able to select a difficulty: easy, medium, or hard
-- As a user, I want to be able to add power-ups to a selection of power-ups I can activate at any time
-- As a user, I want to be able to receive "game tips" before starting a game
-- As a user, I want to be able to remove and add my own game tips to a quote bank, one of which can be displayed before
-starting a game, or when browsing game tips
+- As a user, I want to be able to add and remove recipes from my collection
+- As a user, I want to be able to view a list of all the recipes in my collection
+- As a user, I want to be able to select a recipe and view it in detail
+- As a user, I want to be able to search for recipes who all share a common ingredient
+- As a user, I want to be able to rate a recipe on a scale of one to five stars
 
 
