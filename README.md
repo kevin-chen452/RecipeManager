@@ -20,7 +20,7 @@ as a kid. So I want to relive my childhood to an extent, by making a block break
 
 - As a user, I want to be able to change the colour of my paddle and balls before a game
 - As a user, I want to be able to select a difficulty: easy, medium, or hard
-- As a user, I want to be able to add power-ups to a selection of power-ups I can activate at any time
+- As a user, I want to be able to add power-ups to a selection of up to 2 power-ups I can activate at any time in game
 - As a user, I want to be able to receive "game tips" before starting a game
 - As a user, I want to be able to remove and add my own game tips to a quote bank, one of which can be displayed before
 starting a game, or when browsing game tips
