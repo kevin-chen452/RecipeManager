@@ -20,7 +20,6 @@ beyond these two months.
 - As a user, I want to be able to add and remove recipes from my collection
 - As a user, I want to be able to view a list of all the recipes in my collection
 - As a user, I want to be able to select a recipe and view it in detail
-- As a user, I want to be able to search for recipes who all share a common ingredient
 - As a user, I want to be able to rate a recipe on a scale of one to five stars
 
 
