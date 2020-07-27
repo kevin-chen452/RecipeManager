@@ -23,12 +23,10 @@ public class RecipeManager {
         boolean keepGoing = true;
         String command;
         input = new Scanner(System.in);
-
         while (keepGoing) {
             displayMenu();
             command = input.nextLine();
             command = command.toLowerCase();
-
             if (command.equals("q")) {
                 keepGoing = false;
             } else {
@@ -109,7 +107,6 @@ public class RecipeManager {
         System.out.println("Taking you back to the main menu now...");
     }
 
-
     // MODIFIES: this
     // EFFECTS: conducts the viewing of a recipe
     private void doViewRecipes() {
@@ -167,22 +164,28 @@ public class RecipeManager {
         } else {
             System.out.println("Select the recipe you want to rate. Here's a list to help you:");
             System.out.println(tryGetRecipeList());
-            String name = input.nextLine();
-            Recipe recipe = collection.getRecipe(name);
-            if (recipe != null) {
-                System.out.println("You have chosen " + recipe.recipeName + ". Leave rating as a number from 1-5.");
-                int rating = input.nextInt();
-                try {
-                    recipe.setRating(rating);
-                    System.out.println("You have set the rating for " + name + " to be: " + rating);
-                } catch (IllegalRateException e) {
-                    System.out.println("Sorry, that's not a valid rating.");
-                }
-            } else {
-                System.out.println("Sorry, that recipe does not exist.");
-            }
+            helpDoRecipeRating();
         }
         System.out.println("Taking you back to the main menu now...");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: helps perform recipe rating
+    private void helpDoRecipeRating() {
+        String name = input.nextLine();
+        Recipe recipe = collection.getRecipe(name);
+        if (recipe != null) {
+            System.out.println("You have chosen " + recipe.recipeName + ". Leave rating as a number from 1-5.");
+            int rating = input.nextInt();
+            try {
+                recipe.setRating(rating);
+                System.out.println("You have set the rating for " + name + " to be: " + rating);
+            } catch (IllegalRateException e) {
+                System.out.println("Sorry, that's not a valid rating.");
+            }
+        } else {
+            System.out.println("Sorry, that recipe does not exist.");
+        }
     }
 
     // MODIFIES: this
@@ -262,7 +265,6 @@ public class RecipeManager {
         }
     }
 
-
     // EFFECTS: prints name of recipe to the screen
     private void printRecipeName(String selected) {
         System.out.println("Your new recipe name is: " + selected);
@@ -276,6 +278,5 @@ public class RecipeManager {
             return "Sorry! It seems there are no recipes in the system currently...\n";
         }
     }
-
 }
 
