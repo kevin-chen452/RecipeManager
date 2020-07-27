@@ -31,7 +31,7 @@ public class Collection {
     // MODIFIES: this
     // EFFECTS: removes recipe from collection
     public void removeRecipe(String recipeName) throws NoRecipeFoundException {
-        for (Recipe recipe: recipeList) {
+        for (Recipe recipe: recipeList) { // I don't understand why this must be of type Object
             if (recipe.getName() == recipeName) {
                 recipeList.remove(recipeName);
             } else {
@@ -39,6 +39,17 @@ public class Collection {
             }
         }
     }
+
+    /*
+    public void removeRecipe(String recipeName) throws NoRecipeFoundException {
+        if (recipeList.contains(recipeName)) {
+            recipeList.remove(recipeName);
+        } else {
+            throw new NoRecipeFoundException();
+        }
+    } */
+
+
 
     // REQUIRES: recipe list is not empty
     // EFFECTS: returns list of recipes

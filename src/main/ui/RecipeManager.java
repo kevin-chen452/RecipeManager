@@ -107,11 +107,11 @@ public class RecipeManager {
     private void doViewRecipes() {
         System.out.println("Here are the recipes present in the system:");
         try {
-            collection.getRecipeList();
+            System.out.println(collection.getRecipeList());
         } catch (EmptyRecipeListException e) {
             System.out.println("Sorry! It seems there are no recipes in the system currently...");
         }
-        System.out.println("Press m to return to the main menu.");
+        System.out.println("Taking you back to the main menu now.");
     }
 
     // MODIFIES: this

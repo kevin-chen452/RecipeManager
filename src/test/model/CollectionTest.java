@@ -43,7 +43,7 @@ public class CollectionTest {
     @Test
     void testGetRecipeListSuccess() throws EmptyRecipeListException {
         testCollection.addRecipe(testRecipe1);
-        assertEquals(testCollection.recipeList, testCollection.getRecipeList());
+        assertEquals("Soju Ice Cream", testCollection.getRecipeList());
     }
 
     @Test
