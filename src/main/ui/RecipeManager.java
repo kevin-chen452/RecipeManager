@@ -81,15 +81,20 @@ public class RecipeManager {
         System.out.print("Enter the name of your new recipe:\n");
         String name = input.nextLine();
         Recipe newRecipe = new Recipe(name);
-        collection.addRecipe(newRecipe);
-        printRecipeName(name);
+        if (name.length() > 0) {
+            collection.addRecipe(newRecipe);
+            printRecipeName(name);
+        } else {
+            System.out.println("Sorry, that's not a valid recipe name.");
+        }
         System.out.println("Taking you back out to the main menu now...");
     }
 
     // MODIFIES: this
     // EFFECTS: conducts the removal of a recipe
     private void doRemoveRecipe() {
-        System.out.println("Enter the name of the recipe you want to remove:");
+        System.out.println("Enter the name of the recipe you want to remove. Here's a list of recipes to help you:");
+        System.out.println(tryGetRecipeList());
         String name = input.nextLine();
         try {
             collection.removeRecipe(name);
@@ -124,11 +129,22 @@ public class RecipeManager {
             System.out.println("Yes! Recipe " + recipe.recipeName + " has been located. Here are the details:");
             System.out.println("Recipe name: " + recipe.getName());
             System.out.println("Ingredients: " + recipe.getIngredientList());
-            System.out.println("Preparation time: " + recipe.getCookingTime() + " minutes");
-            System.out.println("Rating: " + recipe.getRating() + " stars");
+            System.out.println("Preparation time: " + recipe.getCookingTime() + " minute"
+                    + makePlural(recipe.getCookingTime()));
+            System.out.println("Rating: " + recipe.getRating() + " star" + makePlural(recipe.getRating()));
             System.out.println("Taking you back to the main menu now...");
         } else {
-            System.out.println("Sorry, recipe does not exist. Taking you back to main menu now...");
+            System.out.println("Sorry, that recipe does not exist.");
+            System.out.println("Taking you back to the main menu now...");
+        }
+    }
+
+    // EFFECTS: checks if an s needs to be added or not
+    private String makePlural(int num) {
+        if (num <= 1) {
+            return "";
+        } else {
+            return "s";
         }
     }
 
@@ -141,14 +157,17 @@ public class RecipeManager {
         Recipe recipe = collection.getRecipe(name);
         if (recipe != null) {
             System.out.println("You have chosen " + recipe.recipeName + ". Leave your rating as a number from 1-5.");
+            int rating = input.nextInt();
+            try {
+                recipe.setRating(rating);
+                System.out.println("You have set the rating for " + name + " to be: " + rating);
+            } catch (IllegalRateException e) {
+                System.out.println("Sorry, that's not a valid rating.");
+            }
+        } else {
+            System.out.println("Sorry, that recipe does not exist.");
         }
-        int rating = input.nextInt();
-        try {
-            recipe.setRating(rating);
-            System.out.println("You have set the rating for " + name + " to be: " + rating + "!");
-        } catch (IllegalRateException e) {
-            System.out.println("Sorry, that's not a valid rating.");
-        }
+
         System.out.println("Taking you back to the main menu now...");
     }
 
@@ -161,14 +180,18 @@ public class RecipeManager {
         Recipe recipe = collection.getRecipe(name);
         if (recipe != null) {
             System.out.println("You have chosen " + recipe.recipeName + ". Add a positive time in minutes.");
-        }
-        int time = input.nextInt();
-        try {
-            recipe.setCookingTime(time);
-            System.out.println("The cooking time for " + name + " has been set to: " + time + " minutes!");
+            int time = input.nextInt();
+            try {
+                recipe.setCookingTime(time);
+                System.out.println("The cooking time for " + name + " has been set to: " + time
+                        + " minute" + makePlural(time) + "!");
+                System.out.println("Taking you back to the main menu now...");
+            } catch (IllegalTimeException e) {
+                System.out.println("Sorry, that's not a valid time. Taking you back to the main menu now...\n");
+            }
+        } else {
+            System.out.println("Sorry, that recipe does not exist.");
             System.out.println("Taking you back to the main menu now...");
-        } catch (IllegalTimeException e) {
-            System.out.println("Sorry, that's not a valid time. Taking you back to the main menu now...\n");
         }
     }
 
@@ -181,8 +204,12 @@ public class RecipeManager {
         Recipe recipe = collection.getRecipe(name);
         if (recipe != null) {
             System.out.println("You have chosen recipe " + recipe.recipeName + ". Add an ingredient.");
+            helpAddIngredients(name);
+        } else {
+            System.out.println("Sorry, that recipe does not exist.");
+            System.out.println("Taking you back to the main menu now...");
         }
-        helpAddIngredients(name);
+
     }
 
     // MODIFIES: this

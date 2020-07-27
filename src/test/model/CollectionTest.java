@@ -120,4 +120,43 @@ public class CollectionTest {
             fail();
         }
     }
+
+    @Test
+    void testGetEmptyRecipeFail() {
+        assertEquals(null, testCollection.getRecipe(""));
+    }
+
+    @Test
+    void testGetNonEmptyRecipeFail() {
+        testCollection.addRecipe(testRecipe1);
+        assertEquals(null, testCollection.getRecipe(""));
+    }
+
+    @Test
+    void testGetRecipeFail() {
+        testCollection.addRecipe(testRecipe1);
+        assertEquals(null, testCollection.getRecipe("In-n-Out Burger"));
+    }
+
+    @Test
+    void testGetNonEmptyRecipeSuccess() {
+        testCollection.addRecipe(testRecipe1);
+        assertEquals(testRecipe1, testCollection.getRecipe("Soju Ice Cream"));
+    }
+
+    @Test
+    void testGetLongRecipeSuccess() {
+        testCollection.addRecipe(testRecipe1);
+        testCollection.addRecipe(testRecipe2);
+        testCollection.addRecipe(testRecipe3);
+        assertEquals(testRecipe2, testCollection.getRecipe("In-n-Out Burger"));
+    }
+
+    @Test
+    void testGetLongRecipeFail() {
+        testCollection.addRecipe(testRecipe1);
+        testCollection.addRecipe(testRecipe2);
+        testCollection.addRecipe(testRecipe3);
+        assertEquals(null, testCollection.getRecipe("Orchard Commons Fried Chicken"));
+    }
 }
