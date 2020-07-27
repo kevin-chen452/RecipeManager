@@ -11,8 +11,8 @@ import java.util.Scanner;
 // recipe manager application
 public class RecipeManager {
     private Scanner input;
-    private Recipe recipe;
-    private Collection collection;
+    private Recipe recipe = new Recipe("default");
+    private Collection collection = new Collection();
 
     // Source: TellerApp
     // EFFECTS: runs recipe manager application
@@ -75,7 +75,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the adding of a recipe
     private void doAddRecipe() {
-        System.out.print("\nEnter the name of your new recipe: ");
+        System.out.print("Enter the name of your new recipe:\n ");
         String name = input.nextLine();
         new Recipe(name);
         printRecipeName(name);
@@ -85,68 +85,68 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the removal of a recipe
     private void doRemoveRecipe() {
-        System.out.println("\nEnter the name of the recipe you want to remove: ");
         String name = input.nextLine();
+        System.out.println("Enter the name of the recipe you want to remove:\n ");
         try {
             collection.removeRecipe(recipe);
         } catch (NoRecipeFoundException e) {
-            System.out.println("Recipe not found...\n");
+            System.out.println("Recipe not found...");
         }
-        System.out.println("\nRecipe " + name + " has been successfully removed!");
-        System.out.println("\nPress m to return to the main menu.");
+        System.out.println("Recipe " + name + " has been successfully removed!");
+        System.out.println("Press m to return to the main menu.");
     }
 
 
     // MODIFIES: this
     // EFFECTS: conducts the viewing of a recipe
     private void doViewRecipes() {
-        System.out.println("\nHere are the recipes present in the system:");
+        System.out.println("Here are the recipes present in the system:");
         try {
             collection.getRecipeList();
         } catch (EmptyRecipeListException e) {
-            System.out.println("\nSorry! It seems there are no recipes in the system currently...");
+            System.out.println("Sorry! It seems there are no recipes in the system currently...");
         }
-        System.out.println("\nPress m to return to the main menu.");
+        System.out.println("Press m to return to the main menu.");
     }
 
     // MODIFIES: this
     // EFFECTS: conducts the locating of a recipe
     private void doLocateRecipe() {
-        System.out.println("\nInput the name of the recipe you are trying to find. Here's a list to help you:");
+        System.out.println("Input the name of the recipe you are trying to find. Here's a list to help you:");
         tryGetRecipeList();
         String name = input.nextLine();
-        System.out.println("\nLet's see if we can find recipe " + name + "...");
+        System.out.println("Let's see if we can find recipe " + name + "...");
         if (collection.getRecipe(recipe.recipeName)) {
-            System.out.println("\nYes! it has been located. Here are the details:");
+            System.out.println("Yes! it has been located. Here are the details:");
             recipe.getName();
             recipe.getIngredientList();
             recipe.getCookingTime();
             recipe.getRating();
-            System.out.println("\nPress m to return to the main menu.");
+            System.out.println("Press m to return to the main menu.");
         }
     }
 
     // MODIFIES: this
     // EFFECTS: conducts the rating of a recipe
     private void doRecipeRating() {
-        System.out.println("\nSelect the recipe you want to rate. Here's a list to help you:");
+        System.out.println("Select the recipe you want to rate. Here's a list to help you:");
         tryGetRecipeList();
         String name = input.nextLine();
         if (collection.getRecipe(name)) {
-            System.out.println("\nYou have chosen" + recipe.recipeName + ". Leave your rating as a number from 1-5.");
+            System.out.println("You have chosen" + recipe.recipeName + ". Leave your rating as a number from 1-5.");
         }
         int rating = input.nextInt();
         try {
             recipe.setRating(rating);
         } catch (IllegalRateException e) {
-            System.out.println("\nSorry, that's not a valid rating. A number between 1 to 5 please.");
+            System.out.println("Sorry, that's not a valid rating. A number between 1 to 5 please.");
         }
-        System.out.println("\nYou have set the rating for " + name + " to be: " + rating + "!");
+        System.out.println("You have set the rating for " + name + " to be: " + rating + "!");
     }
 
     // EFFECTS: prints name of recipe to the screen
     private void printRecipeName(String selected) {
-        System.out.println("\nYour new recipe name: " + selected);
+        System.out.println("Your new recipe name: " + selected);
     }
 
     // EFFECTS: tries and catches EmptyRecipeListException
@@ -154,7 +154,7 @@ public class RecipeManager {
         try {
             collection.getRecipeList();
         } catch (EmptyRecipeListException e) {
-            System.out.println("\nSorry! It seems there are no recipes in the system currently...");
+            System.out.println("Sorry! It seems there are no recipes in the system currently...");
         }
     }
 }

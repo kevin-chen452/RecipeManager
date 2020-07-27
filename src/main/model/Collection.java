@@ -9,9 +9,15 @@ import java.util.LinkedList;
 public class Collection {
     public LinkedList recipeList;
 
-    // EFFECTS: creates new empty collection of recipes
+    // EFFECTS: creates new collection of recipes, three different recipes as default
     public Collection() {
         this.recipeList = new LinkedList();
+        /*Recipe recipe1 = new Recipe("kimchi fried rice");
+        Recipe recipe2 = new Recipe("injeolmi bingsu");
+        Recipe recipe3 = new Recipe("chicken sandwich");
+        recipeList.add(recipe1);
+        recipeList.add(recipe2);
+        recipeList.add(recipe3); */
     }
 
     // MODIFIES: this
