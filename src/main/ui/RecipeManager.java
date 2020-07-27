@@ -146,7 +146,7 @@ public class RecipeManager {
 
     // EFFECTS: prints name of recipe to the screen
     private void printRecipeName(String selected) {
-        System.out.println("Your new recipe name: " + selected);
+        System.out.println("Your new recipe name is: " + selected);
     }
 
     // EFFECTS: tries and catches EmptyRecipeListException
