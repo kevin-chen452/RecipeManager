@@ -52,17 +52,13 @@ public class Collection {
         }
     }
 
-
-
     // EFFECTS: returns specific recipe if found
-    public Boolean getRecipe(String recipeName) {
-        Boolean wasRecipeFound = false;
+    public Recipe getRecipe(String recipeName) {
         for (Recipe recipe : recipeList) {
             if (recipe.getName().equals(recipeName)) {
-                wasRecipeFound = true;
-                break;
+                return recipe;
             }
         }
-        return wasRecipeFound;
+        return null;
     }
 }
