@@ -49,7 +49,7 @@ public class CollectionTest {
     @Test
     void testRemoveRecipeFailEmpty() {
         try {
-            testCollection.removeRecipe(testRecipe1);
+            testCollection.removeRecipe(testRecipe1.getName());
         } catch (NoRecipeFoundException e) {
         }
     }
@@ -58,7 +58,7 @@ public class CollectionTest {
     void testRemoveRecipeFailWrongRecipe() {
         testCollection.addRecipe(testRecipe1);
         try {
-            testCollection.removeRecipe(testRecipe2);
+            testCollection.removeRecipe(testRecipe2.getName());
         } catch (NoRecipeFoundException e) {
         }
     }
@@ -69,7 +69,7 @@ public class CollectionTest {
         testCollection.addRecipe(testRecipe2);
         testCollection.addRecipe(testRecipe4);
         try {
-            testCollection.removeRecipe(testRecipe3);
+            testCollection.removeRecipe(testRecipe3.getName());
         } catch (NoRecipeFoundException e) {
         }
     }
@@ -78,7 +78,7 @@ public class CollectionTest {
     void testRemoveOneRecipeSuccess() {
         testCollection.addRecipe(testRecipe3);
         try {
-            testCollection.removeRecipe(testRecipe3);
+            testCollection.removeRecipe(testRecipe3.getName());
         } catch (NoRecipeFoundException e) {
             fail();
         }
@@ -93,10 +93,10 @@ public class CollectionTest {
         testCollection.addRecipe(testRecipe4);
         testCollection.addRecipe(testRecipe4);
         try {
-            testCollection.removeRecipe(testRecipe3);
-            testCollection.removeRecipe(testRecipe2);
-            testCollection.removeRecipe(testRecipe4);
-            testCollection.removeRecipe(testRecipe4);
+            testCollection.removeRecipe(testRecipe3.getName());
+            testCollection.removeRecipe(testRecipe2.getName());
+            testCollection.removeRecipe(testRecipe4.getName());
+            testCollection.removeRecipe(testRecipe4.getName());
         } catch (NoRecipeFoundException e) {
             fail();
         }

@@ -22,7 +22,7 @@ public class RecipeManager {
 
     // MODIFIES: this
     // EFFECTS: processes user input
-    private void runRecipeManager() {
+    public void runRecipeManager() {
         boolean keepGoing = true;
         String command = null;
         input = new Scanner(System.in);
@@ -75,25 +75,30 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the adding of a recipe
     private void doAddRecipe() {
-        System.out.print("Enter the name of your new recipe:\n");
-        String name = input.nextLine();
+        System.out.print("Enter the name of your new recipe:\n ");
+        String name = input.next();
         new Recipe(name);
         printRecipeName(name);
+        System.out.println("Taking you back out to the main menu now...");
     }
-
 
     // MODIFIES: this
     // EFFECTS: conducts the removal of a recipe
     private void doRemoveRecipe() {
         String name = input.nextLine();
-        System.out.println("Enter the name of the recipe you want to remove:\n ");
-        try {
-            collection.removeRecipe(recipe);
-        } catch (NoRecipeFoundException e) {
-            System.out.println("Recipe not found...");
+        System.out.println("Enter the name of the recipe you want to remove:\n");
+        Boolean repeater = true;
+        while (repeater) {
+            try {
+                collection.removeRecipe(name);
+                repeater = false;
+            } catch (NoRecipeFoundException e) {
+                System.out.println("Recipe not found... try a different name:\n ");
+                name = input.nextLine();
+            }
         }
         System.out.println("Recipe " + name + " has been successfully removed!");
-        System.out.println("Press m to return to the main menu.");
+        System.out.println("Taking you back to the main menu now...");
     }
 
 

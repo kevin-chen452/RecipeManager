@@ -4,6 +4,7 @@ import exceptions.EmptyRecipeListException;
 import exceptions.NoRecipeFoundException;
 
 import java.util.LinkedList;
+import model.Recipe;
 
 // represents a collection of recipes
 public class Collection {
@@ -12,12 +13,12 @@ public class Collection {
     // EFFECTS: creates new collection of recipes, three different recipes as default
     public Collection() {
         this.recipeList = new LinkedList();
-        /*Recipe recipe1 = new Recipe("kimchi fried rice");
+        Recipe recipe1 = new Recipe("kimchi fried rice");
         Recipe recipe2 = new Recipe("injeolmi bingsu");
         Recipe recipe3 = new Recipe("chicken sandwich");
         recipeList.add(recipe1);
         recipeList.add(recipe2);
-        recipeList.add(recipe3); */
+        recipeList.add(recipe3);
     }
 
     // MODIFIES: this
@@ -29,11 +30,13 @@ public class Collection {
     // REQUIRES: recipe is in collection
     // MODIFIES: this
     // EFFECTS: removes recipe from collection
-    public void removeRecipe(Recipe recipe) throws NoRecipeFoundException {
-        if (!recipeList.contains(recipe)) {
-            throw new NoRecipeFoundException();
-        } else {
-            recipeList.remove(recipe);
+    public void removeRecipe(String recipeName) throws NoRecipeFoundException {
+        for (Recipe recipe: recipeList) {
+            if (recipe.getName() == recipeName) {
+                recipeList.remove(recipeName);
+            } else {
+                throw new NoRecipeFoundException();
+            }
         }
     }
 
