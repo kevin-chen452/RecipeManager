@@ -75,7 +75,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the adding of a recipe
     private void doAddRecipe() {
-        System.out.print("Enter the name of your new recipe:\n ");
+        System.out.print("Enter the name of your new recipe:\n");
         String name = input.nextLine();
         new Recipe(name);
         printRecipeName(name);
