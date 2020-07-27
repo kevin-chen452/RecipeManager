@@ -4,21 +4,14 @@ import exceptions.EmptyRecipeListException;
 import exceptions.NoRecipeFoundException;
 
 import java.util.LinkedList;
-import model.Recipe;
 
 // represents a collection of recipes
 public class Collection {
-    public LinkedList recipeList;
+    public LinkedList<Recipe> recipeList;
 
-    // EFFECTS: creates new collection of recipes, three different recipes as default
+    // EFFECTS: creates new collection of recipes
     public Collection() {
         this.recipeList = new LinkedList();
-        Recipe recipe1 = new Recipe("kimchi fried rice");
-        Recipe recipe2 = new Recipe("injeolmi bingsu");
-        Recipe recipe3 = new Recipe("chicken sandwich");
-        recipeList.add(recipe1);
-        recipeList.add(recipe2);
-        recipeList.add(recipe3);
     }
 
     // MODIFIES: this
@@ -31,39 +24,40 @@ public class Collection {
     // MODIFIES: this
     // EFFECTS: removes recipe from collection
     public void removeRecipe(String recipeName) throws NoRecipeFoundException {
-        for (Recipe recipe: recipeList) { // I don't understand why this must be of type Object
+        for (Recipe recipe: recipeList) {
             if (recipe.getName() == recipeName) {
-                recipeList.remove(recipeName);
+                recipeList.remove(recipe);
+                break;
             } else {
                 throw new NoRecipeFoundException();
             }
         }
     }
 
-    /*
-    public void removeRecipe(String recipeName) throws NoRecipeFoundException {
-        if (recipeList.contains(recipeName)) {
-            recipeList.remove(recipeName);
-        } else {
-            throw new NoRecipeFoundException();
-        }
-    } */
-
-
-
     // REQUIRES: recipe list is not empty
     // EFFECTS: returns list of recipes
-    public LinkedList getRecipeList() throws EmptyRecipeListException {
+    public String getRecipeList() throws EmptyRecipeListException {
         if (recipeList.size() == 0) {
             throw new EmptyRecipeListException();
         } else {
-            return recipeList;
+            for (Recipe recipe : recipeList) {
+                return recipe.getName();
+            }
         }
+        return null;
     }
+
 
 
     // EFFECTS: returns specific recipe if found
     public Boolean getRecipe(String recipeName) {
-        return recipeList.contains(recipeName);
+        Boolean wasRecipeFound = false;
+        for (Recipe recipe : recipeList) {
+            if (recipe.getName() == recipeName) {
+                wasRecipeFound = true;
+                break;
+            }
+        }
+        return wasRecipeFound;
     }
 }

@@ -96,7 +96,6 @@ public class CollectionTest {
             testCollection.removeRecipe(testRecipe3.getName());
             testCollection.removeRecipe(testRecipe2.getName());
             testCollection.removeRecipe(testRecipe4.getName());
-            testCollection.removeRecipe(testRecipe4.getName());
         } catch (NoRecipeFoundException e) {
             fail();
         }

@@ -77,7 +77,8 @@ public class RecipeManager {
     private void doAddRecipe() {
         System.out.print("Enter the name of your new recipe:\n ");
         String name = input.next();
-        new Recipe(name);
+        Recipe newRecipe = new Recipe(name);
+        collection.addRecipe(newRecipe);
         printRecipeName(name);
         System.out.println("Taking you back out to the main menu now...");
     }
@@ -94,7 +95,7 @@ public class RecipeManager {
                 repeater = false;
             } catch (NoRecipeFoundException e) {
                 System.out.println("Recipe not found... try a different name:\n ");
-                name = input.nextLine();
+                name = input.next();
             }
         }
         System.out.println("Recipe " + name + " has been successfully removed!");
@@ -117,17 +118,19 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the locating of a recipe
     private void doLocateRecipe() {
-        System.out.println("Input the name of the recipe you are trying to find. Here's a list to help you:");
-        tryGetRecipeList();
-        String name = input.nextLine();
-        System.out.println("Let's see if we can find recipe " + name + "...");
+        System.out.println("Input the name of the recipe you want: \n");
+        String name = input.next();
+        System.out.println(tryGetRecipeList());
         if (collection.getRecipe(recipe.recipeName)) {
             System.out.println("Yes! it has been located. Here are the details:");
             recipe.getName();
             recipe.getIngredientList();
             recipe.getCookingTime();
             recipe.getRating();
-            System.out.println("Press m to return to the main menu.");
+            System.out.println("When you're ready, type anything to go back to the main menu.");
+            name = input.next();
+        } else {
+            System.out.println("Sorry, recipe could not be found. Returning you to main menu now...");
         }
     }
 
@@ -155,12 +158,13 @@ public class RecipeManager {
     }
 
     // EFFECTS: tries and catches EmptyRecipeListException
-    public void tryGetRecipeList() {
+    public String tryGetRecipeList() {
         try {
-            collection.getRecipeList();
+            return collection.getRecipeList();
         } catch (EmptyRecipeListException e) {
-            System.out.println("Sorry! It seems there are no recipes in the system currently...");
+            return "Sorry! It seems there are no recipes in the system currently...";
         }
     }
+
 }
 
