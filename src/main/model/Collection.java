@@ -31,6 +31,7 @@ public class Collection {
         }
     }
 
+    // REQUIRES: recipe list is not empty
     // EFFECTS: returns list of recipes
     public LinkedList getRecipeList() throws EmptyRecipeListException {
         if (recipeList.size() == 0) {
@@ -38,5 +39,11 @@ public class Collection {
         } else {
             return recipeList;
         }
+    }
+
+
+    // EFFECTS: returns specific recipe if found
+    public Boolean getRecipe(String recipeName) {
+        return recipeList.contains(recipeName);
     }
 }

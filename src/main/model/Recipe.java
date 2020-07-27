@@ -5,10 +5,11 @@ import java.util.LinkedList;
 
 // represents a recipe
 public class Recipe {
+    public String name;
     private int cookingTime;
     public String recipeName;
     public LinkedList ingredients = new LinkedList();
-    public int rating;
+    public int rating = 0;
 
     // EFFECTS: creates a new Recipe with title
     public Recipe(String title)  {
