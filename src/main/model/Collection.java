@@ -3,6 +3,7 @@ package model;
 import exceptions.EmptyRecipeListException;
 import exceptions.NoRecipeFoundException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 // represents a collection of recipes
@@ -24,27 +25,31 @@ public class Collection {
     // MODIFIES: this
     // EFFECTS: removes recipe from collection
     public void removeRecipe(String recipeName) throws NoRecipeFoundException {
-        for (Recipe recipe: recipeList) {
-            if (recipe.getName() == recipeName) {
+        boolean isRecipeFound = false;
+        for (Recipe recipe : recipeList) {
+            if (recipe.getName().equals(recipeName)) {
                 recipeList.remove(recipe);
+                isRecipeFound = true;
                 break;
-            } else {
-                throw new NoRecipeFoundException();
             }
+        }
+        if (!isRecipeFound) {
+            throw new NoRecipeFoundException();
         }
     }
 
     // REQUIRES: recipe list is not empty
     // EFFECTS: returns list of recipes
     public String getRecipeList() throws EmptyRecipeListException {
+        ArrayList<String> allRecipes = new ArrayList<>();
         if (recipeList.size() == 0) {
             throw new EmptyRecipeListException();
         } else {
             for (Recipe recipe : recipeList) {
-                return recipe.getName();
+                allRecipes.add(recipe.recipeName);
             }
+            return String.join(", ", allRecipes);
         }
-        return null;
     }
 
 
@@ -53,7 +58,7 @@ public class Collection {
     public Boolean getRecipe(String recipeName) {
         Boolean wasRecipeFound = false;
         for (Recipe recipe : recipeList) {
-            if (recipe.getName() == recipeName) {
+            if (recipe.getName().equals(recipeName)) {
                 wasRecipeFound = true;
                 break;
             }

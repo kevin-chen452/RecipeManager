@@ -31,6 +31,16 @@ public class CollectionTest {
         assertTrue(testCollection.recipeList.contains(testRecipe1));
     }
 
+    @Test
+    void testAddMultipleRecipe() {
+        testCollection.addRecipe(testRecipe1);
+        testCollection.addRecipe(testRecipe2);
+        testCollection.addRecipe(testRecipe4);
+        assertTrue(testCollection.recipeList.contains(testRecipe1));
+        assertTrue(testCollection.recipeList.contains(testRecipe2));
+        assertFalse(testCollection.recipeList.contains(testRecipe3));
+        assertTrue(testCollection.recipeList.contains(testRecipe4));
+    }
 
     @Test
     void testGetEmptyRecipeList() {
@@ -44,6 +54,16 @@ public class CollectionTest {
     void testGetRecipeListSuccess() throws EmptyRecipeListException {
         testCollection.addRecipe(testRecipe1);
         assertEquals("Soju Ice Cream", testCollection.getRecipeList());
+    }
+
+    @Test
+    void testGetBiggerRecipeListSuccess() throws EmptyRecipeListException {
+        testCollection.addRecipe(testRecipe1);
+        testCollection.addRecipe(testRecipe2);
+        testCollection.addRecipe(testRecipe3);
+        testCollection.addRecipe(testRecipe4);
+        assertEquals("Soju Ice Cream, In-n-Out Burger, Injeolmi Bingsu, Orchard Commons Fried Chicken",
+                testCollection.getRecipeList());
     }
 
     @Test

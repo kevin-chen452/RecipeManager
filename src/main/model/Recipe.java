@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 // represents a recipe
 public class Recipe {
-    public String name;
     public int cookingTime;
     public String recipeName;
     public LinkedList ingredients = new LinkedList();
