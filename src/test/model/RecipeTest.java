@@ -121,7 +121,7 @@ public class RecipeTest {
             testRecipe.removeIngredient("rice");
         } catch (EmptyIngredientException e) {
             fail();
-        } catch (NoIngredientException e) {
+        } catch (NoIngredientFoundException e) {
             fail();
         }
         assertFalse(testRecipe.ingredients.contains("rice"));
@@ -143,7 +143,7 @@ public class RecipeTest {
             testRecipe.removeIngredient("salt & pepper");
         } catch (EmptyIngredientException e) {
             fail();
-        } catch (NoIngredientException e) {
+        } catch (NoIngredientFoundException e) {
             fail();
         }
         assertFalse(testRecipe.ingredients.contains("rice"));
@@ -152,23 +152,25 @@ public class RecipeTest {
     @Test
     void testRemoveIngredientFailNoIngredient() {
         try {
+            assertFalse(testRecipe.ingredients.contains("rice"));
             testRecipe.removeIngredient("rice");
-        } catch (NoIngredientException e) {
-        } catch (EmptyIngredientException e) {
+        } catch (NoIngredientFoundException e) {
             fail();
+        } catch (EmptyIngredientException e) {
         }
         assertFalse(testRecipe.ingredients.contains("rice"));
     }
 
     @Test
-    void testRemoveIngredientFailEmptyIngredient() {
+    void testRemoveIngredientFailNoIngredientFound() {
         try {
-            testRecipe.removeIngredient("");
-        } catch (NoIngredientException e) {
-            fail();
+            testRecipe.addIngredient("rice");
+            testRecipe.removeIngredient("noodles");
+        } catch (NoIngredientFoundException e) {
         } catch (EmptyIngredientException e) {
+            fail();
         }
-        assertFalse(testRecipe.ingredients.contains("rice"));
+        assertTrue(testRecipe.ingredients.contains("rice"));
     }
 
     @Test

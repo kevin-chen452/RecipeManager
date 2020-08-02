@@ -59,11 +59,11 @@ public class Recipe {
     // REQUIRES: ingredient is non-zero length and is in ingredient list
     // MODIFIES: this
     // EFFECTS: removes ingredient from ingredient list
-    public void removeIngredient(String ingredient) throws EmptyIngredientException, NoIngredientException {
+    public void removeIngredient(String ingredient) throws EmptyIngredientException, NoIngredientFoundException {
         if (ingredients.size() == 0) {
             throw new EmptyIngredientException();
         } else if (!ingredients.contains(ingredient)) {
-            throw new NoIngredientException();
+            throw new NoIngredientFoundException();
         } else {
             ingredients.remove(ingredient);
         }

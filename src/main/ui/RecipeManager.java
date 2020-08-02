@@ -363,7 +363,7 @@ public class RecipeManager {
                 } catch (EmptyIngredientException e) {
                     System.out.println("Sorry, there are no more ingredients in this recipe.");
                     done = false;
-                } catch (NoIngredientException e) {
+                } catch (NoIngredientFoundException e) {
                     System.out.println("Ingredient not found.");
                 }
             }
