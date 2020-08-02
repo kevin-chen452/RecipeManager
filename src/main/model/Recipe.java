@@ -8,9 +8,9 @@ import java.util.NoSuchElementException;
 
 // represents a recipe
 public class Recipe {
-    public int cookingTime;
     public String recipeName;
     public LinkedList ingredients = new LinkedList();
+    public int cookingTime;
     public int rating = 0;
     public LinkedList<String> instructions = new LinkedList();
 
