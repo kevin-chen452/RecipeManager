@@ -18,8 +18,10 @@ beyond these two months.
 ## User Stories
 
 - As a user, I want to be able to add and remove recipes from my collection
-- As a user, I want to be able to view a list of all the recipes in my collection
+- As a user, I want to be able to add the estimated preparation time for a recipe
 - As a user, I want to be able to select a recipe and view it in detail
 - As a user, I want to be able to rate a recipe on a scale of one to five stars
+- As a user, I want to be able to save my current recipes to file
+- As a user, i want to be able to optionally load my recipes from file when starting the program
 
 

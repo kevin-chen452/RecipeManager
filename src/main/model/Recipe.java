@@ -2,6 +2,7 @@ package model;
 
 import exceptions.*;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 // represents a recipe
 public class Recipe {
@@ -9,6 +10,7 @@ public class Recipe {
     public String recipeName;
     public LinkedList ingredients = new LinkedList();
     public int rating = 0;
+    public LinkedList<String> instructions = new LinkedList();
 
     // EFFECTS: creates a new Recipe with title
     public Recipe(String title)  {
@@ -29,6 +31,12 @@ public class Recipe {
 
     public int getRating() {
         return rating;
+    }
+
+    // REQUIRES: instructions are not empty
+    // EFFECTS: returns the first instruction
+    public String getStep() throws NoSuchElementException {
+        return instructions.getFirst();
     }
 
     // REQUIRES: ingredient is non-zero length
@@ -73,6 +81,17 @@ public class Recipe {
             rating = numStars;
         } else {
             throw new IllegalRateException();
+        }
+    }
+
+    // REQUIRES: instructions are non-zero length
+    // MODIFIES: this
+    // EFFECTS: adds a cooking step to the instructions
+    public void addInstructions(String oneStep) throws EmptyInstructionsException {
+        if (oneStep.length() > 0) {
+            instructions.add(oneStep);
+        } else {
+            throw new EmptyInstructionsException();
         }
     }
 }

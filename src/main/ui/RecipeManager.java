@@ -41,7 +41,6 @@ public class RecipeManager {
         System.out.println("\nWelcome to Recipe Manager! What would you like to do today?");
         System.out.println("\ta -> add recipe");
         System.out.println("\tr -> remove recipe");
-        System.out.println("\tv -> view recipes");
         System.out.println("\tl -> locate recipe");
         System.out.println("\tra -> rate existing recipe");
         System.out.println("\tt -> set recipe time for existing recipe");
@@ -56,8 +55,6 @@ public class RecipeManager {
             doAddRecipe();
         } else if (command.equals("r")) {
             doRemoveRecipe();
-        } else if (command.equals("v")) {
-            doViewRecipes();
         } else if (command.equals("l")) {
             doLocateRecipe();
         } else if (command.equals("ra")) {
@@ -102,22 +99,6 @@ public class RecipeManager {
                 System.out.println("Recipe " + name + " has been successfully removed!");
             } catch (NoRecipeFoundException e) {
                 System.out.println("Recipe not found... sorry");
-            }
-        }
-        System.out.println("Taking you back to the main menu now...");
-    }
-
-    // MODIFIES: this
-    // EFFECTS: conducts the viewing of a recipe
-    private void doViewRecipes() {
-        if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
-        } else {
-            System.out.println("Here are the recipes present in the system:");
-            try {
-                System.out.println(collection.getRecipeList());
-            } catch (EmptyRecipeListException e) {
-                System.out.println("Sorry! It seems there are no recipes in the system currently...");
             }
         }
         System.out.println("Taking you back to the main menu now...");

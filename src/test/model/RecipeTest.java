@@ -1,11 +1,10 @@
 package model;
 
-import exceptions.EmptyIngredientException;
-import exceptions.IllegalRateException;
-import exceptions.IllegalTimeException;
-import exceptions.NoIngredientException;
+import exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +25,50 @@ public class RecipeTest {
     void testGetIngredientListOneItem() throws EmptyIngredientException {
         testRecipe.addIngredient("rice");
         assertEquals(testRecipe.ingredients, testRecipe.getIngredientList());
+    }
+
+    @Test
+    void testAddInstructionsSuccess() {
+        try {
+            testRecipe.addInstructions("first, collect all your ingredients");
+            testRecipe.addInstructions("then, preheat a pan and add a teaspoon of cooking oil");
+            testRecipe.addInstructions("now, minced garlic and stir for about 10 seconds");
+            testRecipe.addInstructions("add some green onions and let them fry for about 20 seconds");
+            testRecipe.addInstructions("add kimchi and stir until about 80% is cooked");
+            testRecipe.addInstructions("add rice and kimchi juice and mix!");
+            testRecipe.addInstructions("and some sesame oil anx mix some more, then turn off the heat");
+            testRecipe.addInstructions("optional: add sesame seeds and more green onions as garnish");
+            testRecipe.addInstructions("enjoy!!");
+        } catch (EmptyInstructionsException e) {
+            fail();
+        }
+    }
+
+    @Test
+    void testAddIngredientsFail() {
+        try {
+            testRecipe.addInstructions("");
+        } catch (EmptyInstructionsException e) {
+        }
+    }
+
+    @Test
+    void testGetFirstIngredientFail() {
+        try {
+            testRecipe.getStep();
+        } catch (NoSuchElementException e) {
+        }
+    }
+
+    @Test
+    void testGetFirstIngredientSuccess() {
+        try {
+            testRecipe.addInstructions("first, gather all your ingredients");
+            testRecipe.addInstructions("then, preheat a pan and add a teaspoon of cooking oil");
+            testRecipe.addInstructions("now, minced garlic and stir for about 10 seconds");
+            assertEquals("first, gather all your ingredients", testRecipe.getStep());
+        } catch (EmptyInstructionsException e) {
+        }
     }
 
     @Test
