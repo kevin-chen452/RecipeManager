@@ -46,7 +46,7 @@ public class RecipeManager {
         System.out.println("\tin -> add instructions to existing recipe");
         System.out.println("\tc -> clear instructions for existing recipe");
         System.out.println("\tt -> set recipe time for existing recipe");
-        System.out.println("\ti -> adds and removes ingredients from a recipe");
+        System.out.println("\ti -> adds and removes ingredients from an existing recipe");
         System.out.println("\tq -> quit");
     }
 
