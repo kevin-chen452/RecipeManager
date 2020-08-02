@@ -22,12 +22,6 @@ public class RecipeTest {
     }
 
     @Test
-    void testGetIngredientListOneItem() throws EmptyIngredientException {
-        testRecipe.addIngredient("rice");
-        assertEquals(testRecipe.ingredients, testRecipe.getIngredientList());
-    }
-
-    @Test
     void testAddInstructionsSuccess() {
         try {
             testRecipe.addInstructions("first, collect all your ingredients");
@@ -45,7 +39,7 @@ public class RecipeTest {
     }
 
     @Test
-    void testAddIngredientsFail() {
+    void testAddInstructionsFail() {
         try {
             testRecipe.addInstructions("");
         } catch (EmptyInstructionsException e) {
@@ -53,22 +47,33 @@ public class RecipeTest {
     }
 
     @Test
-    void testGetFirstIngredientFail() {
+    void testGetInstructionsFail() {
         try {
-            testRecipe.getStep();
+            testRecipe.getInstructionsList();
         } catch (NoSuchElementException e) {
         }
     }
 
     @Test
-    void testGetFirstIngredientSuccess() {
+    void testGetInstructionsSuccess() {
         try {
             testRecipe.addInstructions("first, gather all your ingredients");
             testRecipe.addInstructions("then, preheat a pan and add a teaspoon of cooking oil");
             testRecipe.addInstructions("now, minced garlic and stir for about 10 seconds");
-            assertEquals("first, gather all your ingredients", testRecipe.getStep());
+            assertEquals("first, gather all your ingredients\n"
+                    + "then, preheat a pan and add a teaspoon of cooking oil\nnow, minced garlic and stir for about" +
+                    " 10 seconds", testRecipe.getInstructionsList());
+            testRecipe.clearInstructions();
+            assertEquals(0, testRecipe.instructions.size());
         } catch (EmptyInstructionsException e) {
+            fail();
         }
+    }
+
+    @Test
+    void testGetIngredientListOneItem() throws EmptyIngredientException {
+        testRecipe.addIngredient("rice");
+        assertEquals(testRecipe.ingredients, testRecipe.getIngredientList());
     }
 
     @Test

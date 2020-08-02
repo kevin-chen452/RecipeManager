@@ -1,6 +1,8 @@
 package model;
 
 import exceptions.*;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -13,7 +15,7 @@ public class Recipe {
     public LinkedList<String> instructions = new LinkedList();
 
     // EFFECTS: creates a new Recipe with title
-    public Recipe(String title)  {
+    public Recipe(String title) {
         recipeName = title;
     }
 
@@ -35,15 +37,18 @@ public class Recipe {
 
     // REQUIRES: instructions are not empty
     // EFFECTS: returns the first instruction
-    public String getStep() throws NoSuchElementException {
-        return instructions.getFirst();
+    public String getInstructionsList() throws NoSuchElementException {
+        ArrayList<String> allInstructions = new ArrayList<>();
+        for (String step : instructions) {
+            allInstructions.add(step);
+        }
+        return String.join("\n", allInstructions);
     }
 
     // REQUIRES: ingredient is non-zero length
     // MODIFIES: this
     // EFFECTS: adds ingredient to ingredient list
     public void addIngredient(String ingredient) throws EmptyIngredientException {
-
         if (ingredient.length() == 0) {
             throw new EmptyIngredientException();
         } else {
@@ -55,7 +60,7 @@ public class Recipe {
     // MODIFIES: this
     // EFFECTS: removes ingredient from ingredient list
     public void removeIngredient(String ingredient) throws EmptyIngredientException, NoIngredientException {
-        if (ingredient.length() == 0) {
+        if (ingredients.size() == 0) {
             throw new EmptyIngredientException();
         } else if (!ingredients.contains(ingredient)) {
             throw new NoIngredientException();
@@ -93,5 +98,11 @@ public class Recipe {
         } else {
             throw new EmptyInstructionsException();
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: resets instructions
+    public void clearInstructions() {
+        instructions.clear();
     }
 }
