@@ -76,6 +76,7 @@ public class Reader {
             if (!canParseInt(ingredient)) {
                 ingredientsList.add(ingredient);
             } else {
+                ingredientsList = ingredientsList;
                 break;
             }
         }

@@ -1,1 +1,1 @@
-ice cream // 30 // 5 // scoop out ice cream from bucket
+ice cream // 30 // 3
