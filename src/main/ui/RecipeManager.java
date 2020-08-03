@@ -38,8 +38,6 @@ public class RecipeManager {
         }
         boolean keepGoing = true;
         String command;
-        // input = new Scanner(System.in);
-        //loadRecipes();
         while (keepGoing) {
             displayMenu();
             command = input.nextLine();

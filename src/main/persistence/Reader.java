@@ -69,7 +69,7 @@ public class Reader {
 
     // MODIFIES: this
     // EFFECTS: removes recipe name, adds ingredients until the next string can be parsed into an int
-    static LinkedList helpGetIngredients(List<String> components) {
+    private static LinkedList helpGetIngredients(List<String> components) {
         components.remove(0);
         LinkedList ingredientsList = new LinkedList();
         for (String ingredient : components) {

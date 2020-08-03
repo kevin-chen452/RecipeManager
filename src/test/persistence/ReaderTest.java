@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReaderTest {
@@ -70,6 +71,18 @@ public class ReaderTest {
             assertEquals(riceInstructions, rice.getInstructions());
         } catch (IOException e) {
             fail("Should not have been thrown.");
+        }
+    }
+
+    @Test
+    void testHelpGetEmptyIngredients() {
+        try {
+            LinkedList emptyIngredientList = new LinkedList();
+            Collection recipes = Reader.readRecipes(new File("./data/testRecipeFile3.txt"));
+            Recipe recipe = recipes.get(0);
+            assertEquals(emptyIngredientList, recipe.getIngredientList());
+        } catch (IOException e) {
+            fail("IOException should not have been thrown.");
         }
     }
 
