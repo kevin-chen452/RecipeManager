@@ -72,13 +72,12 @@ public class Reader {
     private static LinkedList helpGetIngredients(List<String> components) {
         components.remove(0);
         LinkedList ingredientsList = new LinkedList();
-        for (String ingredient : components) {
-            if (!canParseInt(ingredient)) {
-                ingredientsList.add(ingredient);
-            } else {
-                ingredientsList = ingredientsList;
-                break;
-            }
+        int i = 0;
+        String ingredient = components.get(i);
+        while (!canParseInt(ingredient)) {
+            ingredientsList.add(ingredient);
+            i++;
+            ingredient = components.get(i);
         }
         return ingredientsList;
     }
