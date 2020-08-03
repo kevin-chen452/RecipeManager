@@ -27,10 +27,19 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: processes user input
     public void runRecipeManager() {
+        input = new Scanner(System.in);
+        System.out.println("Would you like to load your previous recipes? (input yes or no)");
+        String decision = input.nextLine();
+        if (decision.equals("yes")) {
+            loadRecipes();
+            System.out.println("Your old recipes have been loaded!");
+        } else {
+            System.out.println("Alright, then let's start the main application now.");
+        }
         boolean keepGoing = true;
         String command;
-        input = new Scanner(System.in);
-        loadRecipes();
+        // input = new Scanner(System.in);
+        //loadRecipes();
         while (keepGoing) {
             displayMenu();
             command = input.nextLine();
@@ -61,7 +70,7 @@ public class RecipeManager {
             writer.write(collection);
             writer.close();
             if (collection.recipeList.size() == 0) {
-                System.out.println("Recipes saved to file " + RECIPES_FILE + " but you have no recipes "
+                System.out.println("Recipes saved to file " + RECIPES_FILE + "... but you have no recipes "
                         + "to save, so this file now contains no recipes.");
             } else {
                 System.out.println("Recipe" + makePlural(collection.recipeList.size())

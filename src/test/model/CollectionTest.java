@@ -1,11 +1,12 @@
 package model;
 
-import exceptions.EmptyRecipeListException;
-import exceptions.NoRecipeFoundException;
+import exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,14 +16,17 @@ public class CollectionTest {
     public Recipe testRecipe2;
     public Recipe testRecipe3;
     public Recipe testRecipe4;
+    private static final String TEST_FILE = "./data/testCollection.txt";
+    private PrintWriter testWriter;
 
     @BeforeEach
-    public void runBefore() {
+    public void runBefore() throws FileNotFoundException {
         testCollection = new Collection();
         testRecipe1 = new Recipe("Soju Ice Cream");
         testRecipe2 = new Recipe("In-n-Out Burger");
         testRecipe3 = new Recipe("Injeolmi Bingsu");
         testRecipe4 = new Recipe("Orchard Commons Fried Chicken");
+        testWriter = new PrintWriter(new File(TEST_FILE));
     }
 
     @Test
@@ -185,5 +189,26 @@ public class CollectionTest {
         testCollection.addRecipe(testRecipe2);
         testCollection.addRecipe(testRecipe3);
         assertEquals(null, testCollection.getRecipe("Orchard Commons Fried Chicken"));
+    }
+
+    @Test
+    void testSaveSuccessNoExceptions() {
+        try {
+            testRecipe1.addIngredient("test ingredient");
+            testRecipe1.setCookingTime(1);
+            testRecipe1.setRating(2);
+            testRecipe1.addInstructions("run the test and pray for the best");
+            testCollection.addRecipe(testRecipe1);
+            testCollection.save(testWriter);
+            testWriter.close();
+        } catch (EmptyIngredientException e) {
+            fail("EmptyIngredientException should not be thrown.");
+        } catch (IllegalTimeException e) {
+            fail("IllegalTimeException should not be thrown.");
+        } catch (IllegalRateException e) {
+            fail("IllegalRateException should not be thrown.");
+        } catch (EmptyInstructionsException e) {
+            fail("EmptyInstructionsException should not be thrown.");
+        }
     }
 }
