@@ -2,17 +2,24 @@ package model;
 
 import exceptions.EmptyRecipeListException;
 import exceptions.NoRecipeFoundException;
+import persistence.Reader;
+import persistence.Saveable;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 // represents a collection of recipes
-public class Collection {
+public class Collection implements Saveable {
     public LinkedList<Recipe> recipeList;
 
     // EFFECTS: creates new collection of recipes
     public Collection() {
         this.recipeList = new LinkedList();
+    }
+
+    public Recipe get(int index) {
+        return recipeList.get(index);
     }
 
     // MODIFIES: this
@@ -60,5 +67,20 @@ public class Collection {
             }
         }
         return null;
+    }
+
+    @Override
+    public void save(PrintWriter printWriter) {
+        for (Recipe recipe : recipeList) {
+            printWriter.print(recipe.recipeName);
+            printWriter.print(Reader.DELIMITER);
+            printWriter.print(recipe.ingredients);
+            printWriter.print(Reader.DELIMITER);
+            printWriter.print(recipe.cookingTime);
+            printWriter.print(Reader.DELIMITER);
+            printWriter.println(recipe.rating);
+            printWriter.print(Reader.DELIMITER);
+            printWriter.println(recipe.instructions);
+        }
     }
 }

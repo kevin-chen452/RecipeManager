@@ -36,7 +36,7 @@ public class Recipe {
     }
 
     // REQUIRES: instructions are not empty
-    // EFFECTS: returns the first instruction
+    // EFFECTS: returns the instructions
     public String getInstructionsList() throws NoSuchElementException {
         ArrayList<String> allInstructions = new ArrayList<>();
         for (String step : instructions) {
@@ -44,6 +44,12 @@ public class Recipe {
         }
         return String.join("\n", allInstructions);
     }
+
+    // EFFECTS: returns instructions as LinkedList
+    public LinkedList getInstructions() {
+        return instructions;
+    }
+
 
     // REQUIRES: ingredient is non-zero length
     // MODIFIES: this

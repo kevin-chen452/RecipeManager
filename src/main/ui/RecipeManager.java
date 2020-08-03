@@ -3,11 +3,19 @@ package ui;
 import exceptions.*;
 import model.Collection;
 import model.Recipe;
+import persistence.Reader;
+import persistence.Writer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Scanner;
 
 // recipe manager application
 public class RecipeManager {
+    private static final String RECIPES_FILE = "./data/recipes.txt";
     private Scanner input;
     private Collection collection = new Collection();
 
@@ -23,6 +31,7 @@ public class RecipeManager {
         boolean keepGoing = true;
         String command;
         input = new Scanner(System.in);
+        loadRecipes();
         while (keepGoing) {
             displayMenu();
             command = input.nextLine();
@@ -36,6 +45,36 @@ public class RecipeManager {
         System.out.println("\nGoodbye! Hope you will get cooking soon :)");
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads recipes into collection from RECIPES_FILE, if that file exists, otherwise do nothing
+    private void loadRecipes() {
+        try {
+            collection = Reader.readRecipes(new File(RECIPES_FILE));
+        } catch (IOException e) {
+            // do nothing
+        }
+    }
+
+    // EFFECTS: saves state of collection to RECIPES_FILE
+    private void saveRecipes() {
+        if (collection.recipeList.size() == 0) {
+            System.out.println("Sorry, there are no recipes in the list to save right now.");
+        } else {
+            try {
+                Writer writer = new Writer(new File(RECIPES_FILE));
+                writer.write(collection);
+                writer.close();
+                System.out.println("Recipes saved to file " + RECIPES_FILE);
+            } catch (FileNotFoundException e) {
+                System.out.println("Unable to save recipes to " + RECIPES_FILE);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                // this is due to a programming error
+            }
+        }
+        System.out.println("Taking you back to the main menu now...");
+    }
+
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nWelcome to Recipe Manager! What would you like to do today?");
@@ -47,6 +86,7 @@ public class RecipeManager {
         System.out.println("\tc -> clear instructions for existing recipe");
         System.out.println("\tt -> set recipe time for existing recipe");
         System.out.println("\ti -> adds and removes ingredients from an existing recipe");
+        System.out.println("\ts -> save recipes to file");
         System.out.println("\tq -> quit");
     }
 
@@ -69,6 +109,8 @@ public class RecipeManager {
             doRecipeTime();
         } else if (command.equals("i")) {
             doModifyIngredients();
+        } else if (command.equals("s")) {
+            saveRecipes();
         } else if (command.equals("m")) {
             displayMenu();
         } else {
@@ -88,7 +130,7 @@ public class RecipeManager {
         } else {
             System.out.println("Sorry, that's not a valid recipe name.");
         }
-        System.out.println("Taking you back out to the main menu now...");
+        System.out.println("Taking you back to the main menu now...");
     }
 
     // MODIFIES: this
