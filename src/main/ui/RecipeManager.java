@@ -57,20 +57,22 @@ public class RecipeManager {
 
     // EFFECTS: saves state of collection to RECIPES_FILE
     private void saveRecipes() {
-        if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list to save right now.");
-        } else {
-            try {
-                Writer writer = new Writer(new File(RECIPES_FILE));
-                writer.write(collection);
-                writer.close();
-                System.out.println("Recipes saved to file " + RECIPES_FILE);
-            } catch (FileNotFoundException e) {
-                System.out.println("Unable to save recipes to " + RECIPES_FILE);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                // this is due to a programming error
+        try {
+            Writer writer = new Writer(new File(RECIPES_FILE));
+            writer.write(collection);
+            writer.close();
+            if (collection.recipeList.size() == 0) {
+                System.out.println("Recipes saved to file " + RECIPES_FILE + " but you have no recipes "
+                        + "to save, so this file now contains no recipes.");
+            } else {
+                System.out.println("Recipe" + makePlural(collection.recipeList.size())
+                        +  " saved to file " + RECIPES_FILE);
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save recipes to " + RECIPES_FILE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // this is due to a programming error
         }
         System.out.println("Taking you back to the main menu now...");
     }

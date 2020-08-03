@@ -74,13 +74,18 @@ public class Collection implements Saveable {
         for (Recipe recipe : recipeList) {
             printWriter.print(recipe.recipeName);
             printWriter.print(Reader.DELIMITER);
-            printWriter.print(recipe.ingredients);
-            printWriter.print(Reader.DELIMITER);
+            for (Object ingredient : recipe.ingredients) {
+                printWriter.print(ingredient);
+                printWriter.print(Reader.DELIMITER);
+            }
             printWriter.print(recipe.cookingTime);
             printWriter.print(Reader.DELIMITER);
-            printWriter.println(recipe.rating);
-            printWriter.print(Reader.DELIMITER);
-            printWriter.println(recipe.instructions);
+            printWriter.print(recipe.rating);
+            for (Object step : recipe.instructions) {
+                printWriter.print(Reader.DELIMITER);
+                printWriter.print(step);
+            }
+            printWriter.println();
         }
     }
 }

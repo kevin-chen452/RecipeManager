@@ -49,7 +49,7 @@ public class Reader {
         return new ArrayList<>(Arrays.asList(splits));
     }
 
-    // REQUIRES: components has size 4 where element 0 represents the
+    // REQUIRES: components has arbitrary size where element 0 represents the
     // name of the next recipe to be constructed, the next elements represent ingredients (until an element can be
     // parse int), which is the cooking time, element immediately after is the rating, and
     // the remaining elements represent instructions
