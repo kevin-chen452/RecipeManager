@@ -4,6 +4,7 @@ import exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,6 +44,24 @@ public class RecipeTest {
         try {
             testRecipe.addInstructions("");
         } catch (EmptyInstructionsException e) {
+        }
+    }
+
+    @Test
+    void testGetInstructionsAsEmptyLinkedList() {
+        LinkedList emptyLinkedList = new LinkedList();
+        assertEquals(emptyLinkedList, testRecipe.getInstructions());
+    }
+
+    @Test
+    void testGetInstructionsAsLinkedList() {
+        LinkedList testInstructions = new LinkedList();
+        testInstructions.add("test");
+        try {
+            testRecipe.addInstructions("test");
+            assertEquals(testInstructions, testRecipe.getInstructions());
+        } catch (EmptyInstructionsException e) {
+            fail();
         }
     }
 

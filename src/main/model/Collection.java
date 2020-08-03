@@ -18,6 +18,8 @@ public class Collection implements Saveable {
         this.recipeList = new LinkedList();
     }
 
+    // REQUIRES: index is <= recipe.size() - 1
+    // EFFECTS: returns recipe at position index - 1
     public Recipe get(int index) {
         return recipeList.get(index);
     }

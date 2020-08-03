@@ -2,7 +2,6 @@ package persistence;
 
 import model.Collection;
 import model.Recipe;
-import sun.awt.image.ImageWatched;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.util.List;
 // source: TellerApp
 // A reader that can read recipe data from a file
 public class Reader {
-    public static final String DELIMITER = " // "; // because commas might be inputted by user
+    public static final String DELIMITER = " // "; // in case commas are inputted by user
 
     // EFFECTS: returns a list of recipes parsed from file; throws
     // IOException if an exception is raised when opening / reading from file

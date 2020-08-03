@@ -26,6 +26,33 @@ public class CollectionTest {
     }
 
     @Test
+    void testGetRecipeSuccess() {
+        try {
+            testCollection.addRecipe(testRecipe1);
+            assertEquals(testRecipe1, testCollection.get(0));
+        } catch (IndexOutOfBoundsException e) {
+            fail("IndexOutOfBounds is not supposed to be thrown.");
+        }
+    }
+
+    @Test
+    void testGetRecipeNull() {
+        try {
+            testCollection.get(0);
+        } catch (IndexOutOfBoundsException e) {
+        }
+    }
+
+    @Test
+    void testGetRecipeOutOfBoundsFail() {
+        try {
+            testCollection.addRecipe(testRecipe1);
+            testCollection.get(10);
+        } catch (IndexOutOfBoundsException e) {
+        }
+    }
+
+    @Test
     void testAddRecipe() {
         testCollection.addRecipe(testRecipe1);
         assertTrue(testCollection.recipeList.contains(testRecipe1));
