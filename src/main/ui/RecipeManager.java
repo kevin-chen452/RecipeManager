@@ -127,14 +127,18 @@ public class RecipeManager {
     }
 
     // MODIFIES: this
-    // EFFECTS: conducts the adding of a recipe
+    // EFFECTS: conducts the adding of a recipe, checks if another recipe already has this name
     private void doAddRecipe() {
         System.out.print("Enter the name of your new recipe:\n");
         String name = input.nextLine();
-        Recipe newRecipe = new Recipe(name);
         if (name.length() > 0) {
-            collection.addRecipe(newRecipe);
-            printRecipeName(name);
+            if (collection.getRecipe(name) == null) {
+                Recipe newRecipe = new Recipe(name);
+                collection.addRecipe(newRecipe);
+                printRecipeName(name);
+            } else {
+                System.out.println("Sorry, that name has already been taken.");
+            }
         } else {
             System.out.println("Sorry, that's not a valid recipe name.");
         }
