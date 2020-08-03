@@ -82,4 +82,10 @@ public class ReaderTest {
         } catch (IOException E) {
         }
     }
+
+    @Test
+    // dummy test for Reader, so no assert statements present
+    void testReader() {
+        Reader testReader = new Reader();
+    }
 }
