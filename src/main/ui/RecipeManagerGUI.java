@@ -114,6 +114,7 @@ public class RecipeManagerGUI implements ActionListener {
         } else if (e.getSource() == loadButton) {
             loadRecipes();
             activity.setText("Your recipes have been loaded!");
+            playSound("cheeringKidsSoundEffect.wav");
         } else if (e.getSource() == addRecipeButton) {
             helpAddRecipe();
         } else if (e.getSource() == manageRecipeButton) {
@@ -152,6 +153,7 @@ public class RecipeManagerGUI implements ActionListener {
         Recipe recipe = new Recipe(input);
         collection.addRecipe(recipe);
         activity.setText("Successfully added recipe " + input + "!");
+        // playSound("cheeringKidsSoundEffect.wav");
     }
 
 
