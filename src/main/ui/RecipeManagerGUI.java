@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
 
 // source: Lab 1 - Photoviewer
 // source: https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial
@@ -54,7 +57,7 @@ public class RecipeManagerGUI implements ActionListener {
         frame = new JFrame();
         recipeName = new JTextField(10);
         welcomeText = new JLabel("Welcome to Recipe Manager!", SwingConstants.CENTER);
-        activity = new JLabel("",SwingConstants.CENTER);
+        activity = new JLabel("", SwingConstants.CENTER);
         recipeButton = new JButton(addRecipeString);
         recipeListener = new RecipeListener(recipeButton);
     }
@@ -107,6 +110,7 @@ public class RecipeManagerGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
             saveRecipes();
+            playSound("cheeringKidsSoundEffect.wav");
         } else if (e.getSource() == loadButton) {
             loadRecipes();
             activity.setText("Your recipes have been loaded!");
@@ -118,6 +122,21 @@ public class RecipeManagerGUI implements ActionListener {
             } catch (EmptyRecipeListException ex) {
                 activity.setText("Sorry, there are no recipes in the list right now.");
             }
+        }
+    }
+
+    // source: http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
+    // EFFECTS: plays sound
+    public void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File("data/" + soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 
@@ -211,7 +230,7 @@ public class RecipeManagerGUI implements ActionListener {
                         + "to save, so the save file now contains no recipes.");
             } else {
                 activity.setText("Recipe" + collection.recipeList.size()
-                        +  " saved to file " + RECIPES_GUIFILE);
+                        + " saved to file " + RECIPES_GUIFILE);
             }
         } catch (FileNotFoundException e) {
             activity.setText("Unable to save recipes to " + RECIPES_GUIFILE);
