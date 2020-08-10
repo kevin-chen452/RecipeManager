@@ -24,7 +24,7 @@ beyond these two months.
 - As a user, I want to be able to save my current recipes to file
 - As a user, i want to be able to optionally load my recipes from file when starting the program
 
-#Instructions for Grader
+# Instructions for Grader
 
 - You can generate the first required event (add recipe) by clicking on "Add recipes", then typing a recipe name and
  hitting the "Enter" key, or pressing the "Add" button 
