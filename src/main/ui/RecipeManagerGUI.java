@@ -1,6 +1,7 @@
 package ui;
 
 import exceptions.EmptyRecipeListException;
+import exceptions.NoRecipeFoundException;
 import model.Collection;
 import model.Recipe;
 import persistence.Reader;
@@ -16,9 +17,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 // source: Lab 1 - Photoviewer
 // source: https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial
@@ -58,7 +62,7 @@ public class RecipeManagerGUI implements ActionListener {
         loadButton = new JButton("Load recipes");
         addRecipeButton = new JButton("Add recipes");
         manageRecipeButton = new JButton("Manage recipes");
-        recipesList = new JList(collection.recipeList.toArray());
+        recipesList = new JList();
         homePanel = new JPanel(new BorderLayout());
         removeRecipePanel = new JPanel(new BorderLayout());
         buttonsRemovePanel = new JPanel(new BorderLayout());
@@ -110,17 +114,54 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // source: https://stackoverflow.com/questions/14046837/positioning-components-in-swing-guis
+    // source: https://www.geeksforgeeks.org/how-to-convert-linkedlist-to-array-in-java/
+    // source: https://stackoverflow.com/questions/14625091/create-a-list-of-entries-and-make-each-entry-clickable
     // MODIFIES: this
     // EFFECTS: sets up removeRecipePanel
     public void manageRemovePanel() {
+        /*
         removeRecipePanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
+         */
+        recipesList.setModel(new AbstractListModel() {
+            Object[] recipesObjectArray = collection.recipeList.toArray();
+            String[] recipes = Arrays.copyOf(recipesObjectArray, recipesObjectArray.length, String[].class);
+            @Override
+            public int getSize() {
+                return collection.recipeList.size();
+            }
+
+            @Override
+            public Object getElementAt(int i) {
+                return recipes[i];
+            }
+        });
+        recipesList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                recipesListValueChanged(e);
+            }
+        });
         removeRecipePanel.add(removeText);
         removeRecipePanel.add(recipesList);
         manageButtonsPanel();
         removeRecipePanel.add(buttonsRemovePanel);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes recipe
+    private void recipesListValueChanged(javax.swing.event.ListSelectionEvent evt) {
+        //set text on right here
+        String s = (String) recipesList.getSelectedValue();
+        if (s.equals(collection.getRecipe(s))) {
+            try {
+                collection.removeRecipe(s);
+            } catch (NoRecipeFoundException e) {
+                //do nothing
+            }
+        }
     }
 
     // MODIFIES: this
@@ -230,7 +271,7 @@ public class RecipeManagerGUI implements ActionListener {
                 Recipe recipe = new Recipe(input);
                 collection.addRecipe(recipe);
                 activity.setText("Successfully added recipe " + input + "!");
-                playSound("cheeringKidsSoundEffect.wav");
+                //playSound("cheeringKidsSoundEffect.wav");
             }
             //Reset the text field.
             recipeNameField.requestFocusInWindow();
@@ -288,7 +329,7 @@ public class RecipeManagerGUI implements ActionListener {
                         + "to save, so the save file now contains no recipes.");
             } else {
                 activity.setText("Recipes saved to file " + RECIPES_GUIFILE);
-                playSound("cheeringKidsSoundEffect.wav");
+                //playSound("cheeringKidsSoundEffect.wav");
             }
         } catch (FileNotFoundException e) {
             activity.setText("Unable to save recipes to " + RECIPES_GUIFILE);
@@ -304,7 +345,7 @@ public class RecipeManagerGUI implements ActionListener {
         try {
             collection = Reader.readRecipes(new File(RECIPES_GUIFILE));
             activity.setText("Your recipes have been loaded!");
-            playSound("cheeringKidsSoundEffect.wav");
+            //playSound("cheeringKidsSoundEffect.wav");
         } catch (IOException e) {
             // do nothing
         }
