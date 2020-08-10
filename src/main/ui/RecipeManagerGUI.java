@@ -1,6 +1,5 @@
 package ui;
 
-import exceptions.EmptyRecipeListException;
 import model.Collection;
 import model.Recipe;
 import persistence.Reader;
@@ -26,17 +25,20 @@ import javax.sound.sampled.AudioSystem;
 public class RecipeManagerGUI implements ActionListener {
     private JFrame frame;
     private JLabel welcomeText;
+    private JLabel removeText;
     private JLabel activity;
     private JButton saveButton;
     private JButton loadButton;
     private JButton addRecipeButton;
     private JButton manageRecipeButton;
     private JPanel homePanel;
-    private JTextField recipeName;
+    private JPanel removeRecipePanel;
+    private JTextField recipeNameField;
     private Collection collection = new Collection();
     private static final String RECIPES_GUIFILE = "./data/UIrecipes.txt";
-    private static final String addRecipeString = "Add recipe";
+    private static final String emptyString = "";
     private JButton recipeButton;
+    private JButton mainMenuButton;
     private RecipeListener recipeListener;
 
     // EFFECTS: sets up window in which Recipe Manager application will be played
@@ -51,15 +53,18 @@ public class RecipeManagerGUI implements ActionListener {
     public void init() {
         saveButton = new JButton("Save recipes");
         loadButton = new JButton("Load recipes");
-        addRecipeButton = new JButton("Add recipe");
+        addRecipeButton = new JButton("Add recipes");
         manageRecipeButton = new JButton("Manage recipes");
         homePanel = new JPanel(new BorderLayout());
+        removeRecipePanel = new JPanel(new BorderLayout());
         frame = new JFrame();
-        recipeName = new JTextField(10);
+        recipeNameField = new JTextField(10);
         welcomeText = new JLabel("Welcome to Recipe Manager!", SwingConstants.CENTER);
-        activity = new JLabel("", SwingConstants.CENTER);
-        recipeButton = new JButton(addRecipeString);
+        activity = new JLabel(emptyString, SwingConstants.CENTER);
+        removeText = new JLabel("Click on a recipe to remove it.", SwingConstants.CENTER);
+        recipeButton = new JButton("Add recipes");
         recipeListener = new RecipeListener(recipeButton);
+        mainMenuButton = new JButton("Return to main menu");
     }
 
     // MODIFIES: this
@@ -73,9 +78,11 @@ public class RecipeManagerGUI implements ActionListener {
         addRecipeButton.addActionListener(this);
         manageRecipeButton.setActionCommand("manageRecipeButton");
         manageRecipeButton.addActionListener(this);
-        recipeButton.setActionCommand(addRecipeString);
+        recipeButton.setActionCommand("Add recipes");
         recipeButton.addActionListener(recipeListener);
         recipeButton.setEnabled(false);
+        mainMenuButton.addActionListener(this);
+        mainMenuButton.setBounds(0, 0, 100, 20);
     }
 
     // MODIFIES: this
@@ -88,6 +95,8 @@ public class RecipeManagerGUI implements ActionListener {
         homePanel.add(loadButton);
         homePanel.add(addRecipeButton);
         homePanel.add(manageRecipeButton);
+        removeRecipePanel.add(removeText);
+        removeRecipePanel.add(mainMenuButton);
     }
 
     // MODIFIES: this
@@ -105,12 +114,11 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: changes action text depending on action performed
+    // EFFECTS: changes action text and GUI depending on action performed
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
             saveRecipes();
-            playSound("cheeringKidsSoundEffect.wav");
         } else if (e.getSource() == loadButton) {
             loadRecipes();
             activity.setText("Your recipes have been loaded!");
@@ -118,11 +126,18 @@ public class RecipeManagerGUI implements ActionListener {
         } else if (e.getSource() == addRecipeButton) {
             helpAddRecipe();
         } else if (e.getSource() == manageRecipeButton) {
-            try {
-                activity.setText("List of recipes:" + collection.getRecipeList());
-            } catch (EmptyRecipeListException ex) {
+            if (collection.recipeList.size() != 0) {
+                homePanel.setVisible(false);
+                frame.setContentPane(removeRecipePanel);
+                removeRecipePanel.setVisible(true);
+            } else {
                 activity.setText("Sorry, there are no recipes in the list right now.");
             }
+        } else if (e.getSource() == mainMenuButton) {
+            removeRecipePanel.setVisible(false);
+            activity.setText(emptyString);
+            frame.setContentPane(homePanel);
+            homePanel.setVisible(true);
         }
     }
 
@@ -144,18 +159,12 @@ public class RecipeManagerGUI implements ActionListener {
     // MODIFIES: this
     // EFFECTS: helps conduct the adding of a new recipe
     private void helpAddRecipe() {
-        activity.setText("Input recipe name: ");
-        recipeName.addActionListener(recipeListener);
-        recipeName.getDocument().addDocumentListener(recipeListener);
-        homePanel.add(recipeName);
+        activity.setText("Input recipe name.");
+        recipeNameField.getDocument().addDocumentListener(recipeListener);
+        recipeNameField.addActionListener(recipeListener);
+        homePanel.add(recipeNameField);
         homePanel.add(recipeButton);
-        String input = recipeName.getText();
-        Recipe recipe = new Recipe(input);
-        collection.addRecipe(recipe);
-        activity.setText("Successfully added recipe " + input + "!");
-        // playSound("cheeringKidsSoundEffect.wav");
     }
-
 
     // source: ListDemo.java
     //This listener is shared by the text field and the hire button.
@@ -169,23 +178,28 @@ public class RecipeManagerGUI implements ActionListener {
 
         //Required by ActionListener.
         public void actionPerformed(ActionEvent e) {
-            String name = recipeName.getText();
-            if (name.equals("") || alreadyInList(name)) {
-                Toolkit.getDefaultToolkit().beep();
-                recipeName.requestFocusInWindow();
-                recipeName.selectAll();
-                return;
+            String input = recipeNameField.getText();
+            if (alreadyInList(input) || input.equals("")) {
+                activity.setText("Sorry, that name is already in use.");
+                //Toolkit.getDefaultToolkit().beep();
+                recipeNameField.requestFocusInWindow();
+                recipeNameField.selectAll();
+            } else {
+                Recipe recipe = new Recipe(input);
+                collection.addRecipe(recipe);
+                activity.setText("Successfully added recipe " + input + "!");
+                playSound("cheeringKidsSoundEffect.wav");
             }
             //Reset the text field.
-            recipeName.requestFocusInWindow();
-            recipeName.setText("");
+            recipeNameField.requestFocusInWindow();
+            recipeNameField.setText("");
         }
 
         //This method tests for string equality. You could certainly
         //get more sophisticated about the algorithm.  For example,
         //you might want to ignore white space and capitalization.
         protected boolean alreadyInList(String name) {
-            return name.equals(collection.getRecipe(name));
+            return collection.getRecipe(name) != null;
         }
 
         //Required by DocumentListener.
@@ -231,8 +245,8 @@ public class RecipeManagerGUI implements ActionListener {
                 activity.setText("Recipes saved to file... but you have no recipes "
                         + "to save, so the save file now contains no recipes.");
             } else {
-                activity.setText("Recipe" + collection.recipeList.size()
-                        + " saved to file " + RECIPES_GUIFILE);
+                activity.setText("Recipes saved to file " + RECIPES_GUIFILE);
+                playSound("cheeringKidsSoundEffect.wav");
             }
         } catch (FileNotFoundException e) {
             activity.setText("Unable to save recipes to " + RECIPES_GUIFILE);
