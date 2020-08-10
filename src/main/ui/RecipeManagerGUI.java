@@ -119,12 +119,11 @@ public class RecipeManagerGUI implements ActionListener {
     // MODIFIES: this
     // EFFECTS: sets up removeRecipePanel
     public void manageRemovePanel() {
-        /*
         removeRecipePanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-         */
+         /*
         recipesList.setModel(new AbstractListModel() {
             Object[] recipesObjectArray = collection.recipeList.toArray();
             String[] recipes = Arrays.copyOf(recipesObjectArray, recipesObjectArray.length, String[].class);
@@ -144,6 +143,7 @@ public class RecipeManagerGUI implements ActionListener {
                 recipesListValueChanged(e);
             }
         });
+          */
         removeRecipePanel.add(removeText);
         removeRecipePanel.add(recipesList);
         manageButtonsPanel();
