@@ -26,8 +26,8 @@ beyond these two months.
 
 # Instructions for Grader
 
-- You can generate the first required event (add recipe) by clicking on "Add recipes", then typing a recipe name and
- hitting the "Enter" key, or pressing the "Add" button 
+- You can generate the first required event (add recipe) by clicking on "Add recipes", then typing a recipe name, and
+ hitting the "Enter" key or pressing the "Add" button 
 - You can generate the second required event (remove recipe) by clicking on "Manage recipes" when you have at least one
 recipe in the system, and then clicking on a recipe in the list and pressing the "Remove" button
 - You can trigger my audio component by adding a recipe, removing a recipe, saving recipes when you have at least one
