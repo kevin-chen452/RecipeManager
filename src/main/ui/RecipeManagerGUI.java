@@ -1,7 +1,5 @@
 package ui;
 
-import exceptions.EmptyRecipeListException;
-import exceptions.NoRecipeFoundException;
 import model.Collection;
 import model.Recipe;
 import persistence.Reader;
@@ -17,31 +15,31 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 // source: Lab 1 - Photoviewer
 // source: https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial
 // /uiswing/examples/components/ListDemoProject/src/components/ListDemo.java
+// represents the recipe manager GUI
 public class RecipeManagerGUI implements ActionListener {
     private JFrame frame;
     private JLabel welcomeText;
     private JLabel removeText;
     private JLabel activity;
-    private JList recipesList;
+    private JLabel removeActivity;
+    private JList<Recipe> recipeList;
+    private DefaultListModel recipeModel;
     private JButton saveButton;
     private JButton loadButton;
     private JButton addRecipeButton;
     private JButton manageRecipeButton;
+    private JButton removeRecipeButton;
     private JPanel homePanel;
-    private JPanel removeRecipePanel;
-    private JPanel buttonsRemovePanel;
+    private JPanel manageRecipePanel;
     private JTextField recipeNameField;
-    private Collection collection = new Collection();
+    private Collection collection;
     private static final String RECIPES_GUIFILE = "./data/UIrecipes.txt";
     private static final String emptyString = "";
     private JButton recipeButton;
@@ -54,6 +52,7 @@ public class RecipeManagerGUI implements ActionListener {
         manageButtons();
         managePanel();
         manageFrame();
+        recipeList.setBounds(100, 100, 75, 75);
     }
 
     // EFFECTS: instantiates required fields
@@ -62,18 +61,21 @@ public class RecipeManagerGUI implements ActionListener {
         loadButton = new JButton("Load recipes");
         addRecipeButton = new JButton("Add recipes");
         manageRecipeButton = new JButton("Manage recipes");
-        recipesList = new JList();
+        recipeModel = new DefaultListModel();
+        recipeList = new JList<>(recipeModel);
         homePanel = new JPanel(new BorderLayout());
-        removeRecipePanel = new JPanel(new BorderLayout());
-        buttonsRemovePanel = new JPanel(new BorderLayout());
+        collection = new Collection();
+        manageRecipePanel = new JPanel(new BorderLayout());
+        removeRecipeButton = new JButton("Remove");
         frame = new JFrame();
         recipeNameField = new JTextField(10);
         welcomeText = new JLabel("Welcome to Recipe Manager!", SwingConstants.CENTER);
         activity = new JLabel(emptyString, SwingConstants.CENTER);
-        removeText = new JLabel("Click on a recipe to remove it.");
+        removeActivity = new JLabel(emptyString, SwingConstants.CENTER);
+        removeText = new JLabel("Click on a recipe to remove it.", SwingConstants.CENTER);
         recipeButton = new JButton("Add recipes");
-        recipeListener = new RecipeListener(recipeButton);
         mainMenuButton = new JButton("Return to main menu");
+        recipeListener = new RecipeListener(recipeButton);
     }
 
     // MODIFIES: this
@@ -92,6 +94,7 @@ public class RecipeManagerGUI implements ActionListener {
         recipeButton.setEnabled(false);
         mainMenuButton.addActionListener(this);
         mainMenuButton.setBounds(-400, -20, 100, 20);
+        removeRecipeButton.addActionListener(this);
     }
 
     // MODIFIES: this
@@ -114,61 +117,16 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // source: https://stackoverflow.com/questions/14046837/positioning-components-in-swing-guis
-    // source: https://www.geeksforgeeks.org/how-to-convert-linkedlist-to-array-in-java/
     // source: https://stackoverflow.com/questions/14625091/create-a-list-of-entries-and-make-each-entry-clickable
     // MODIFIES: this
-    // EFFECTS: sets up removeRecipePanel
+    // EFFECTS: sets up manageRecipePanel
     public void manageRemovePanel() {
-        removeRecipePanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-         /*
-        recipesList.setModel(new AbstractListModel() {
-            Object[] recipesObjectArray = collection.recipeList.toArray();
-            String[] recipes = Arrays.copyOf(recipesObjectArray, recipesObjectArray.length, String[].class);
-            @Override
-            public int getSize() {
-                return collection.recipeList.size();
-            }
-
-            @Override
-            public Object getElementAt(int i) {
-                return recipes[i];
-            }
-        });
-        recipesList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                recipesListValueChanged(e);
-            }
-        });
-          */
-        removeRecipePanel.add(removeText);
-        removeRecipePanel.add(recipesList);
-        manageButtonsPanel();
-        removeRecipePanel.add(buttonsRemovePanel);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: removes recipe
-    private void recipesListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-        //set text on right here
-        String s = (String) recipesList.getSelectedValue();
-        if (s.equals(collection.getRecipe(s))) {
-            try {
-                collection.removeRecipe(s);
-            } catch (NoRecipeFoundException e) {
-                //do nothing
-            }
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up non-grid components of remove recipe panel
-    public void manageButtonsPanel() {
-        buttonsRemovePanel.setLayout(new GridLayout(10, 10));
-        buttonsRemovePanel.add(mainMenuButton, SwingConstants.CENTER);
+        manageRecipePanel.setLayout(new GridLayout());
+        manageRecipePanel.add(removeText);
+        manageRecipePanel.add(recipeList);
+        manageRecipePanel.add(mainMenuButton);
+        manageRecipePanel.add(removeActivity);
+        manageRecipePanel.add(removeRecipeButton);
     }
 
     // MODIFIES: this
@@ -187,6 +145,25 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // MODIFIES: this
+    // EFFECTS: goes to manage recipes GUI
+    public void goToManageRecipes() {
+        homePanel.setVisible(false);
+        frame.setContentPane(manageRecipePanel);
+        manageRecipePanel.setVisible(true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: goes back to main menu GUI
+    public void goToMainMenu() {
+        manageRecipePanel.setVisible(false);
+        activity.setText(emptyString);
+        homePanel.remove(recipeNameField);
+        homePanel.remove(recipeButton);
+        frame.setContentPane(homePanel);
+        homePanel.setVisible(true);
+    }
+
+    // MODIFIES: this
     // EFFECTS: changes action text and GUI depending on action performed
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -198,44 +175,15 @@ public class RecipeManagerGUI implements ActionListener {
             helpAddRecipe();
         } else if (e.getSource() == manageRecipeButton) {
             if (collection.recipeList.size() != 0) {
-                setUpManageRecipes();
+                goToManageRecipes();
             } else {
                 activity.setText("Sorry, there are no recipes in the list right now.");
             }
         } else if (e.getSource() == mainMenuButton) {
             goToMainMenu();
-        }
-    }
-
-    // EFFECTS: creates manage recipes GUI
-    public void setUpManageRecipes() {
-        homePanel.setVisible(false);
-        frame.setContentPane(removeRecipePanel);
-        removeRecipePanel.setVisible(true);
-    }
-
-    // EFFECTS: goes back to main menu GUI
-    public void goToMainMenu() {
-        removeRecipePanel.setVisible(false);
-        activity.setText(emptyString);
-        homePanel.remove(recipeNameField);
-        homePanel.remove(recipeButton);
-        frame.setContentPane(homePanel);
-        homePanel.setVisible(true);
-    }
-
-    // source: http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
-    // EFFECTS: plays sound
-    public void playSound(String soundName) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-                    new File("data/" + soundName).getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
+        } else if (e.getSource() == removeRecipeButton) {
+            recipeModel.remove(recipeList.getSelectedIndex());
+            recipeList = new JList<>(recipeModel);
         }
     }
 
@@ -249,65 +197,81 @@ public class RecipeManagerGUI implements ActionListener {
         homePanel.add(recipeButton);
     }
 
+    // MODIFIES: this
+    // EFFECTS: checks if recipe has been selected
+    private void checkRemoveRecipes() {
+        int index = recipeList.getSelectedIndex();
+        recipeModel.remove(index);
+        recipeList = new JList<>(recipeModel);
+    }
+
     // source: ListDemo.java
-    //This listener is shared by the text field and the hire button.
+    //This listener is shared by the text field and the add recipe button
+    // Checks for actions to add recipe
     class RecipeListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
         private JButton button;
 
+        // EFFECTS: sets this button to be button
         public RecipeListener(JButton button) {
             this.button = button;
         }
 
         //Required by ActionListener.
+        // MODIFIES: this
+        // EFFECTS: checks for inputs to recipe name field, creates and adds recipe if input detected
         public void actionPerformed(ActionEvent e) {
             String input = recipeNameField.getText();
             if (alreadyInList(input) || input.equals("")) {
                 activity.setText("Sorry, that name is already in use.");
-                //Toolkit.getDefaultToolkit().beep();
                 recipeNameField.requestFocusInWindow();
                 recipeNameField.selectAll();
             } else {
                 Recipe recipe = new Recipe(input);
                 collection.addRecipe(recipe);
+                recipeModel.addElement(input);
+                recipeList = new JList<>(recipeModel);
                 activity.setText("Successfully added recipe " + input + "!");
                 //playSound("cheeringKidsSoundEffect.wav");
             }
-            //Reset the text field.
             recipeNameField.requestFocusInWindow();
             recipeNameField.setText("");
         }
 
-        //This method tests for string equality. You could certainly
-        //get more sophisticated about the algorithm.  For example,
-        //you might want to ignore white space and capitalization.
+        // EFFECTS: ensures that recipe is not already in collection
         protected boolean alreadyInList(String name) {
             return collection.getRecipe(name) != null;
         }
 
         //Required by DocumentListener.
+        // EFFECTS: enables button when text field contains text
         public void insertUpdate(DocumentEvent e) {
             enableButton();
         }
 
         //Required by DocumentListener.
+        // EFFECTS: updates text field when empty
         public void removeUpdate(DocumentEvent e) {
             handleEmptyTextField(e);
         }
 
         //Required by DocumentListener.
+        // EFFECTS: makes button clickable if user has inputted something into text field
         public void changedUpdate(DocumentEvent e) {
             if (!handleEmptyTextField(e)) {
                 enableButton();
             }
         }
 
+        // EFFECTS: makes button clickable
         private void enableButton() {
             if (!alreadyEnabled) {
                 button.setEnabled(true);
             }
         }
 
+        // MODIFIES: this
+        // EFFECTS: makes button unenabled when text field is empty
         private boolean handleEmptyTextField(DocumentEvent e) {
             if (e.getDocument().getLength() <= 0) {
                 button.setEnabled(false);
@@ -315,6 +279,21 @@ public class RecipeManagerGUI implements ActionListener {
                 return true;
             }
             return false;
+        }
+    }
+
+    // source: http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
+    // EFFECTS: plays yay sound
+    public void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File("data/" + soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 
@@ -344,10 +323,19 @@ public class RecipeManagerGUI implements ActionListener {
     private void loadRecipes() {
         try {
             collection = Reader.readRecipes(new File(RECIPES_GUIFILE));
+            loadToRecipesList();
             activity.setText("Your recipes have been loaded!");
             //playSound("cheeringKidsSoundEffect.wav");
         } catch (IOException e) {
             // do nothing
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads recipes to recipes list to be displayed on manage recipes
+    private void loadToRecipesList() {
+        for (Recipe recipe: collection.recipeList) {
+            recipeModel.addElement(recipe.recipeName);
         }
     }
 
