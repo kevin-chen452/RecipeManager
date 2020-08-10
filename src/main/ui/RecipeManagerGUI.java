@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.NoRecipeFoundException;
 import model.Collection;
 import model.Recipe;
 import persistence.Reader;
@@ -52,6 +53,7 @@ public class RecipeManagerGUI implements ActionListener {
         manageButtons();
         managePanel();
         manageFrame();
+        manageField();
         recipeList.setBounds(100, 100, 75, 75);
     }
 
@@ -73,7 +75,7 @@ public class RecipeManagerGUI implements ActionListener {
         activity = new JLabel(emptyString, SwingConstants.CENTER);
         removeActivity = new JLabel(emptyString, SwingConstants.CENTER);
         removeText = new JLabel("Click on a recipe to remove it.", SwingConstants.CENTER);
-        recipeButton = new JButton("Add recipes");
+        recipeButton = new JButton("Add");
         mainMenuButton = new JButton("Return to main menu");
         recipeListener = new RecipeListener(recipeButton);
     }
@@ -121,12 +123,12 @@ public class RecipeManagerGUI implements ActionListener {
     // MODIFIES: this
     // EFFECTS: sets up manageRecipePanel
     public void manageRemovePanel() {
-        manageRecipePanel.setLayout(new GridLayout());
+        manageRecipePanel.setLayout(new GridLayout(5, 1));
         manageRecipePanel.add(removeText);
-        manageRecipePanel.add(recipeList);
-        manageRecipePanel.add(mainMenuButton);
         manageRecipePanel.add(removeActivity);
+        manageRecipePanel.add(recipeList);
         manageRecipePanel.add(removeRecipeButton);
+        manageRecipePanel.add(mainMenuButton);
     }
 
     // MODIFIES: this
@@ -145,9 +147,17 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // MODIFIES: this
+    // EFFECTS: adds document listeners to recipe name field
+    public void manageField() {
+        recipeNameField.getDocument().addDocumentListener(recipeListener);
+        recipeNameField.addActionListener(recipeListener);
+    }
+
+    // MODIFIES: this
     // EFFECTS: goes to manage recipes GUI
     public void goToManageRecipes() {
         homePanel.setVisible(false);
+        removeActivity.setText(emptyString);
         frame.setContentPane(manageRecipePanel);
         manageRecipePanel.setVisible(true);
     }
@@ -182,8 +192,11 @@ public class RecipeManagerGUI implements ActionListener {
         } else if (e.getSource() == mainMenuButton) {
             goToMainMenu();
         } else if (e.getSource() == removeRecipeButton) {
-            recipeModel.remove(recipeList.getSelectedIndex());
-            recipeList = new JList<>(recipeModel);
+            try {
+                tryRemoveRecipe();
+            } catch (NoRecipeFoundException ex) {
+                removeActivity.setText("Error with removing recipe.");
+            }
         }
     }
 
@@ -191,24 +204,29 @@ public class RecipeManagerGUI implements ActionListener {
     // EFFECTS: helps conduct the adding of a new recipe
     private void helpAddRecipe() {
         activity.setText("Input recipe name.");
-        recipeNameField.getDocument().addDocumentListener(recipeListener);
-        recipeNameField.addActionListener(recipeListener);
         homePanel.add(recipeNameField);
         homePanel.add(recipeButton);
     }
 
     // MODIFIES: this
-    // EFFECTS: checks if recipe has been selected
-    private void checkRemoveRecipes() {
-        int index = recipeList.getSelectedIndex();
-        recipeModel.remove(index);
-        recipeList = new JList<>(recipeModel);
+    // EFFECTS: check if recipe has been selected, remove if so
+    private void tryRemoveRecipe() throws NoRecipeFoundException {
+        try {
+            int index = recipeList.getSelectedIndex();
+            String name = recipeModel.getElementAt(index).toString();
+            recipeModel.remove(index);
+            collection.removeRecipe(name);
+            removeActivity.setText("Recipe " + name + " has been successfully removed.");
+            playSound("cheeringKidsSoundEffect.wav");
+        } catch (IndexOutOfBoundsException e) {
+            removeActivity.setText("Please select a recipe to remove.");
+        }
     }
 
     // source: ListDemo.java
     //This listener is shared by the text field and the add recipe button
     // Checks for actions to add recipe
-    class RecipeListener implements ActionListener, DocumentListener {
+    public class RecipeListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
         private JButton button;
 
@@ -222,20 +240,19 @@ public class RecipeManagerGUI implements ActionListener {
         // EFFECTS: checks for inputs to recipe name field, creates and adds recipe if input detected
         public void actionPerformed(ActionEvent e) {
             String input = recipeNameField.getText();
-            if (alreadyInList(input) || input.equals("")) {
-                activity.setText("Sorry, that name is already in use.");
+            if (alreadyInList(input) || input.equals(emptyString)) {
+                activity.setText("Sorry, that recipe name is invalid or already in use.");
                 recipeNameField.requestFocusInWindow();
                 recipeNameField.selectAll();
             } else {
                 Recipe recipe = new Recipe(input);
                 collection.addRecipe(recipe);
                 recipeModel.addElement(input);
-                recipeList = new JList<>(recipeModel);
                 activity.setText("Successfully added recipe " + input + "!");
-                //playSound("cheeringKidsSoundEffect.wav");
+                playSound("cheeringKidsSoundEffect.wav");
             }
             recipeNameField.requestFocusInWindow();
-            recipeNameField.setText("");
+            recipeNameField.setText(emptyString);
         }
 
         // EFFECTS: ensures that recipe is not already in collection
@@ -308,7 +325,7 @@ public class RecipeManagerGUI implements ActionListener {
                         + "to save, so the save file now contains no recipes.");
             } else {
                 activity.setText("Recipes saved to file " + RECIPES_GUIFILE);
-                //playSound("cheeringKidsSoundEffect.wav");
+                playSound("cheeringKidsSoundEffect.wav");
             }
         } catch (FileNotFoundException e) {
             activity.setText("Unable to save recipes to " + RECIPES_GUIFILE);
@@ -325,7 +342,7 @@ public class RecipeManagerGUI implements ActionListener {
             collection = Reader.readRecipes(new File(RECIPES_GUIFILE));
             loadToRecipesList();
             activity.setText("Your recipes have been loaded!");
-            //playSound("cheeringKidsSoundEffect.wav");
+            playSound("cheeringKidsSoundEffect.wav");
         } catch (IOException e) {
             // do nothing
         }
@@ -337,13 +354,6 @@ public class RecipeManagerGUI implements ActionListener {
         for (Recipe recipe: collection.recipeList) {
             recipeModel.addElement(recipe.recipeName);
         }
-    }
-
-    /*
-     * Start the recipe manager
-     */
-    public static void main(String[] args) {
-        new RecipeManagerGUI();
     }
 }
 
