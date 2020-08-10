@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.EmptyRecipeListException;
 import model.Collection;
 import model.Recipe;
 import persistence.Reader;
@@ -27,12 +28,14 @@ public class RecipeManagerGUI implements ActionListener {
     private JLabel welcomeText;
     private JLabel removeText;
     private JLabel activity;
+    private JList recipesList;
     private JButton saveButton;
     private JButton loadButton;
     private JButton addRecipeButton;
     private JButton manageRecipeButton;
     private JPanel homePanel;
     private JPanel removeRecipePanel;
+    private JPanel buttonsRemovePanel;
     private JTextField recipeNameField;
     private Collection collection = new Collection();
     private static final String RECIPES_GUIFILE = "./data/UIrecipes.txt";
@@ -55,13 +58,15 @@ public class RecipeManagerGUI implements ActionListener {
         loadButton = new JButton("Load recipes");
         addRecipeButton = new JButton("Add recipes");
         manageRecipeButton = new JButton("Manage recipes");
+        recipesList = new JList(collection.recipeList.toArray());
         homePanel = new JPanel(new BorderLayout());
         removeRecipePanel = new JPanel(new BorderLayout());
+        buttonsRemovePanel = new JPanel(new BorderLayout());
         frame = new JFrame();
         recipeNameField = new JTextField(10);
         welcomeText = new JLabel("Welcome to Recipe Manager!", SwingConstants.CENTER);
         activity = new JLabel(emptyString, SwingConstants.CENTER);
-        removeText = new JLabel("Click on a recipe to remove it.", SwingConstants.CENTER);
+        removeText = new JLabel("Click on a recipe to remove it.");
         recipeButton = new JButton("Add recipes");
         recipeListener = new RecipeListener(recipeButton);
         mainMenuButton = new JButton("Return to main menu");
@@ -82,12 +87,19 @@ public class RecipeManagerGUI implements ActionListener {
         recipeButton.addActionListener(recipeListener);
         recipeButton.setEnabled(false);
         mainMenuButton.addActionListener(this);
-        mainMenuButton.setBounds(0, 0, 100, 20);
+        mainMenuButton.setBounds(-400, -20, 100, 20);
     }
 
     // MODIFIES: this
     // EFFECTS: sets up panel
     public void managePanel() {
+        manageHomePanel();
+        manageRemovePanel();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets up homePanel
+    public void manageHomePanel() {
         homePanel.setLayout(new GridLayout(0, 1));
         homePanel.add(welcomeText);
         homePanel.add(activity);
@@ -95,13 +107,33 @@ public class RecipeManagerGUI implements ActionListener {
         homePanel.add(loadButton);
         homePanel.add(addRecipeButton);
         homePanel.add(manageRecipeButton);
+    }
+
+    // source: https://stackoverflow.com/questions/14046837/positioning-components-in-swing-guis
+    // MODIFIES: this
+    // EFFECTS: sets up removeRecipePanel
+    public void manageRemovePanel() {
+        removeRecipePanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         removeRecipePanel.add(removeText);
-        removeRecipePanel.add(mainMenuButton);
+        removeRecipePanel.add(recipesList);
+        manageButtonsPanel();
+        removeRecipePanel.add(buttonsRemovePanel);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets up non-grid components of remove recipe panel
+    public void manageButtonsPanel() {
+        buttonsRemovePanel.setLayout(new GridLayout(10, 10));
+        buttonsRemovePanel.add(mainMenuButton, SwingConstants.CENTER);
     }
 
     // MODIFIES: this
     // EFFECTS: sets up frame
     public void manageFrame() {
+        frame.pack();
         frame.setContentPane(homePanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -121,24 +153,34 @@ public class RecipeManagerGUI implements ActionListener {
             saveRecipes();
         } else if (e.getSource() == loadButton) {
             loadRecipes();
-            activity.setText("Your recipes have been loaded!");
-            playSound("cheeringKidsSoundEffect.wav");
         } else if (e.getSource() == addRecipeButton) {
             helpAddRecipe();
         } else if (e.getSource() == manageRecipeButton) {
             if (collection.recipeList.size() != 0) {
-                homePanel.setVisible(false);
-                frame.setContentPane(removeRecipePanel);
-                removeRecipePanel.setVisible(true);
+                setUpManageRecipes();
             } else {
                 activity.setText("Sorry, there are no recipes in the list right now.");
             }
         } else if (e.getSource() == mainMenuButton) {
-            removeRecipePanel.setVisible(false);
-            activity.setText(emptyString);
-            frame.setContentPane(homePanel);
-            homePanel.setVisible(true);
+            goToMainMenu();
         }
+    }
+
+    // EFFECTS: creates manage recipes GUI
+    public void setUpManageRecipes() {
+        homePanel.setVisible(false);
+        frame.setContentPane(removeRecipePanel);
+        removeRecipePanel.setVisible(true);
+    }
+
+    // EFFECTS: goes back to main menu GUI
+    public void goToMainMenu() {
+        removeRecipePanel.setVisible(false);
+        activity.setText(emptyString);
+        homePanel.remove(recipeNameField);
+        homePanel.remove(recipeButton);
+        frame.setContentPane(homePanel);
+        homePanel.setVisible(true);
     }
 
     // source: http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
@@ -261,6 +303,8 @@ public class RecipeManagerGUI implements ActionListener {
     private void loadRecipes() {
         try {
             collection = Reader.readRecipes(new File(RECIPES_GUIFILE));
+            activity.setText("Your recipes have been loaded!");
+            playSound("cheeringKidsSoundEffect.wav");
         } catch (IOException e) {
             // do nothing
         }
