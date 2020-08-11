@@ -35,5 +35,11 @@ recipe in the system, or loading recipes
 - You can save the state of my application by pressing the "Save recipes" button
 - You can reload the state of my application by pressing the "Load recipes" button
 
+## Phase 4: Task 2
 
-
+I chose to make a class robust. The class is the Recipe class, and the following methods have a robust design:
+- addIngredient
+- removeIngredient
+- setCookingTime
+- setRating
+- addInstructions

@@ -224,7 +224,7 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // source: ListDemo.java
-    //This listener is shared by the text field and the add recipe button
+    // This listener is shared by the text field and the add recipe button
     // Checks for actions to add recipe
     public class RecipeListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
@@ -300,7 +300,7 @@ public class RecipeManagerGUI implements ActionListener {
     }
 
     // source: http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
-    // EFFECTS: plays yay sound
+    // EFFECTS: plays sound
     public void playSound(String soundName) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
