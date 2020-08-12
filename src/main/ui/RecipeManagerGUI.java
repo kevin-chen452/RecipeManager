@@ -178,27 +178,32 @@ public class RecipeManagerGUI implements ActionListener {
     // EFFECTS: changes action text and GUI depending on action performed
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == saveButton) {
+        if (thisButtonPressed(e, saveButton)) {
             saveRecipes();
-        } else if (e.getSource() == loadButton) {
+        } else if (thisButtonPressed(e, loadButton)) {
             loadRecipes();
-        } else if (e.getSource() == addRecipeButton) {
+        } else if (thisButtonPressed(e, addRecipeButton)) {
             helpAddRecipe();
-        } else if (e.getSource() == manageRecipeButton) {
+        } else if (thisButtonPressed(e, manageRecipeButton)) {
             if (collection.recipeList.size() != 0) {
                 goToManageRecipes();
             } else {
                 activity.setText("Sorry, there are no recipes in the list right now.");
             }
-        } else if (e.getSource() == mainMenuButton) {
+        } else if (thisButtonPressed(e, mainMenuButton)) {
             goToMainMenu();
-        } else if (e.getSource() == removeRecipeButton) {
+        } else if (thisButtonPressed(e, removeRecipeButton)) {
             try {
                 tryRemoveRecipe();
             } catch (NoRecipeFoundException ex) {
                 removeActivity.setText("Error with removing recipe.");
             }
         }
+    }
+
+    // EFFECTS: checks if source of action event is the given JButton
+    public boolean thisButtonPressed(ActionEvent e, JButton b) {
+        return e.getSource() == b;
     }
 
     // MODIFIES: this

@@ -15,7 +15,8 @@ import java.util.Scanner;
 // recipe manager application
 public class RecipeManager {
     private static final String RECIPES_FILE = "./data/recipes.txt";
-    private static final String NO_RECIPES_MESSAGE = "Sorry, there are no recipes in the list right now.";
+    private static final String NO_RECIPES_MESSAGE = "Sorry, there are no recipes in the list right now. "
+            + "Please add a recipe to use this feature!";
     private static final String MAIN_MENU_MESSAGE = "Taking you back to the main menu now...";
     private static final String RECIPE_DNE_MESSAGE = "Sorry, that recipe does not exist.";
     private static final String STOP_OPERATION_MESSAGE = "done";
@@ -49,7 +50,7 @@ public class RecipeManager {
             displayMenu();
             command = input.nextLine();
             command = command.toLowerCase();
-            if (command.equals("q")) {
+            if (commandEqualTo(command, "q")) {
                 keepGoing = false;
             } else {
                 processCommand(command);
@@ -74,7 +75,7 @@ public class RecipeManager {
             Writer writer = new Writer(new File(RECIPES_FILE));
             writer.write(collection);
             writer.close();
-            if (collection.recipeList.size() == 0) {
+            if (noRecipes()) {
                 System.out.println("Recipes saved to file " + RECIPES_FILE + "... but you have no recipes "
                         + "to save, so this file now contains no recipes.");
             } else {
@@ -108,29 +109,34 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
-        if (command.equals("a")) {
+        if (commandEqualTo(command, "a")) {
             doAddRecipe();
-        } else if (command.equals("r")) {
+        } else if (commandEqualTo(command, "r")) {
             doRemoveRecipe();
-        } else if (command.equals("l")) {
+        } else if (commandEqualTo(command, "l")) {
             doLocateRecipe();
-        } else if (command.equals("ra")) {
+        } else if (commandEqualTo(command, "ra")) {
             doRecipeRating();
-        } else if (command.equals("in")) {
+        } else if (commandEqualTo(command, "in")) {
             doAddInstructions();
-        } else if (command.equals("c")) {
+        } else if (commandEqualTo(command, "c")) {
             doClearInstructions();
-        } else if (command.equals("t")) {
+        } else if (commandEqualTo(command, "t")) {
             doRecipeTime();
-        } else if (command.equals("i")) {
+        } else if (commandEqualTo(command, "i")) {
             doModifyIngredients();
-        } else if (command.equals("s")) {
+        } else if (commandEqualTo(command, "s")) {
             saveRecipes();
-        } else if (command.equals("m")) {
+        } else if (commandEqualTo(command, "m")) {
             displayMenu();
         } else {
             System.out.println("Selection not valid...");
         }
+    }
+
+    // EFFECTS: checks if command is equal to given string, both uppercase and lowercase accepted
+    public boolean commandEqualTo(String command, String s) {
+        return command.equalsIgnoreCase(s);
     }
 
     // MODIFIES: this
@@ -152,10 +158,15 @@ public class RecipeManager {
         System.out.println(MAIN_MENU_MESSAGE);
     }
 
+    // EFFECTS: return true if no recipes are in collection's recipe list
+    private boolean noRecipes() {
+        return collection.recipeList.size() == 0;
+    }
+
     // MODIFIES: this
     // EFFECTS: conducts the removal of a recipe
     private void doRemoveRecipe() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("Enter the name of the recipe you want to remove. Here's a list of known recipes:");
@@ -174,7 +185,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the locating of a recipe
     private void doLocateRecipe() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("Input the name of the recipe you want. Here's a list of known recipes:");
@@ -209,7 +220,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the rating of a recipe
     private void doRecipeRating() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("Select the recipe you want to rate. Here's a list of known recipes:");
@@ -241,7 +252,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the adding of instructions
     private void doAddInstructions() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe that you want to add instructions for.");
@@ -286,7 +297,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: does the clearing of instructions for a given recipe
     private void doClearInstructions() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe that you want to remove instructions for.");
@@ -314,7 +325,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the setting of a recipe's preparation time
     private void doRecipeTime() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe whose time you want to set.");
@@ -347,7 +358,7 @@ public class RecipeManager {
     // MODIFIES: this
     // EFFECTS: conducts the adding of multiple ingredients to a recipe
     private void doModifyIngredients() {
-        if (collection.recipeList.size() == 0) {
+        if (noRecipes()) {
             System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe that you want to add or remove ingredients from.");

@@ -51,6 +51,10 @@ doRemoveRecipe, doLocateRecipe, and doRecipeRating, all check that the size of r
 If it is equal to 0, it prints the same message "Sorry, there are no recipes in the list right now." I refactored it
 to make that message a constant, called NO_RECIPES_MESSAGE.
 
+Since many methods check that the size of recipeList is not 0 before continuing, I also made a new helper method
+noRecipes that checks if recipeList size is 0. This reduces the coupling between all these methods, improves
+readability, and allows me to reinforce the idea of single point of control.
+
 In RecipeManager, I also have a message that says "Taking you back to the main menu now..." that is printed at the 
 end of many features. I also made the message a constant, called MAIN_MENU_MESSAGE.
 
@@ -62,7 +66,14 @@ exist. I made this message a constant, called RECIPE_DNE_MESSAGE.
 I use the keyword "done" to allow the user to indicate that they wish to stop the process they are currently doing,
 such as adding/removing ingredients and instructions. I made this string a constant called STOP_OPERATION_MESSAGE.
 
-I did similar things for the keywords "yes" and "no", renaming them to POSITIVE_INPUT and NEGATIVE_INPUT, respectively.
-
 In RecipeManagerGUI, several of the methods play the (probably annoying) sound effect whenever an operation was 
 successful. I refactored this sound name into a constant, called YAY_SOUND_EFFECT_NAME.
+
+In RecipeManagerGUI, I made a helper method thisButtonPressed that reduces the high coupling in the actionPerformed
+method and improves readability.
+
+I did something similar in RecipeManager, where I made a helper method commandEqualTo. This method reduces the coupling
+and repetition into a single method, so I can modify every single case that the user inputs by modifying only the 
+helper method (single point of control). 
+
+
