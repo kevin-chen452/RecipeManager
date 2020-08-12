@@ -46,7 +46,7 @@ I chose to make a class robust. The class is the Recipe class, and the following
 
 ## Phase 4: Task 3
 
-There is too much coupling in my RecipeManager ui class. What happens is that many features, such as
+There is too much coupling in my RecipeManager class. What happens is that many features, such as
 doRemoveRecipe, doLocateRecipe, and doRecipeRating, all check that the size of recipeList is not 0 before continuing.
 If it is equal to 0, it prints the same message "Sorry, there are no recipes in the list right now." I refactored it
 to make that message a constant, called NO_RECIPES_MESSAGE.
