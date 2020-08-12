@@ -24,6 +24,8 @@ public class RecipeManager {
     private static final String NEGATIVE_INPUT = "no";
     private Scanner input;
     private Collection collection = new Collection();
+    private Writer writer;
+    private Reader reader;
 
     // Source: TellerApp
     // EFFECTS: runs recipe manager application
@@ -63,7 +65,8 @@ public class RecipeManager {
     // EFFECTS: loads recipes into collection from RECIPES_FILE, if that file exists, otherwise do nothing
     private void loadRecipes() {
         try {
-            collection = Reader.readRecipes(new File(RECIPES_FILE));
+            reader = new Reader();
+            collection = reader.readRecipes(new File(RECIPES_FILE));
         } catch (IOException e) {
             // do nothing
         }
@@ -72,7 +75,7 @@ public class RecipeManager {
     // EFFECTS: saves state of collection to RECIPES_FILE
     private void saveRecipes() {
         try {
-            Writer writer = new Writer(new File(RECIPES_FILE));
+            writer = new Writer(new File(RECIPES_FILE));
             writer.write(collection);
             writer.close();
             if (noRecipes()) {

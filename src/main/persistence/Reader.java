@@ -15,6 +15,7 @@ import java.util.List;
 // A reader that can read recipe data from a file
 public class Reader {
     public static final String DELIMITER = " // "; // in case commas are inputted by user
+    private static Collection recipes;
 
     // EFFECTS: returns a list of recipes parsed from file; throws
     // IOException if an exception is raised when opening / reading from file
@@ -32,7 +33,7 @@ public class Reader {
     // EFFECTS: returns a list of recipes parsed from list of strings
     // where each string contains data for one recipe
     private static Collection parseContent(List<String> fileContent) {
-        Collection recipes = new Collection();
+        recipes = new Collection();
 
         for (String line : fileContent) {
             ArrayList<String> lineComponents = splitString(line);

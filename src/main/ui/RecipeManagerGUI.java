@@ -47,6 +47,8 @@ public class RecipeManagerGUI implements ActionListener {
     private JButton recipeButton;
     private JButton mainMenuButton;
     private RecipeListener recipeListener;
+    private Writer writer;
+    private Reader reader;
 
     // EFFECTS: sets up window in which Recipe Manager application will be played
     public RecipeManagerGUI() {
@@ -323,7 +325,7 @@ public class RecipeManagerGUI implements ActionListener {
     // EFFECTS: saves state of collection to RECIPES_GUIFILE
     private void saveRecipes() {
         try {
-            Writer writer = new Writer(new File(RECIPES_GUIFILE));
+            writer = new Writer(new File(RECIPES_GUIFILE));
             writer.write(collection);
             writer.close();
             if (collection.recipeList.size() == 0) {
@@ -345,7 +347,8 @@ public class RecipeManagerGUI implements ActionListener {
     // EFFECTS: loads recipes into collection from RECIPES_GUIFILE, if that file exists, otherwise do nothing
     private void loadRecipes() {
         try {
-            collection = Reader.readRecipes(new File(RECIPES_GUIFILE));
+            reader = new Reader();
+            collection = reader.readRecipes(new File(RECIPES_GUIFILE));
             loadToRecipesList();
             activity.setText("Your recipes have been loaded!");
             playSound(YAY_SOUND_EFFECT_NAME);
