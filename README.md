@@ -43,3 +43,26 @@ I chose to make a class robust. The class is the Recipe class, and the following
 - setCookingTime
 - setRating
 - addInstructions
+
+## Phase 4: Task 3
+
+There is too much coupling in my RecipeManager ui class. What happens is that many features, such as
+doRemoveRecipe, doLocateRecipe, and doRecipeRating, all check that the size of recipeList is not 0 before continuing.
+If it is equal to 0, it prints the same message "Sorry, there are no recipes in the list right now." I refactored it
+to make that message a constant, called NO_RECIPES_MESSAGE.
+
+In RecipeManager, I also have a message that says "Taking you back to the main menu now..." that is printed at the 
+end of many features. I also made the message a constant, called MAIN_MENU_MESSAGE.
+
+In RecipeManager, many features involve the user modifying some aspect of one recipe, such as its instructions, its
+ingredients, its rating, etc. This involves the user typing the name of the recipe they want to do such modifications
+to. However, if the user inputs a recipe name that is not in the system, it will print a statement saying it does not
+exist. I made this message a constant, called RECIPE_DNE_MESSAGE.
+
+I use the keyword "done" to allow the user to indicate that they wish to stop the process they are currently doing,
+such as adding/removing ingredients and instructions. I made this string a constant called STOP_OPERATION_MESSAGE.
+
+I did similar things for the keywords "yes" and "no", renaming them to POSITIVE_INPUT and NEGATIVE_INPUT, respectively.
+
+In RecipeManagerGUI, several of the methods play the (probably annoying) sound effect whenever an operation was 
+successful. I refactored this sound name into a constant, called YAY_SOUND_EFFECT_NAME.

@@ -43,6 +43,7 @@ public class RecipeManagerGUI implements ActionListener {
     private Collection collection;
     private static final String RECIPES_GUIFILE = "./data/UIrecipes.txt";
     private static final String emptyString = "";
+    private static final String YAY_SOUND_EFFECT_NAME = "cheeringKidsSoundEffect.wav";
     private JButton recipeButton;
     private JButton mainMenuButton;
     private RecipeListener recipeListener;
@@ -217,7 +218,7 @@ public class RecipeManagerGUI implements ActionListener {
             recipeModel.remove(index);
             collection.removeRecipe(name);
             removeActivity.setText("Recipe " + name + " has been successfully removed.");
-            playSound("cheeringKidsSoundEffect.wav");
+            playSound(YAY_SOUND_EFFECT_NAME);
         } catch (IndexOutOfBoundsException e) {
             removeActivity.setText("Please select a recipe to remove.");
         }
@@ -249,7 +250,7 @@ public class RecipeManagerGUI implements ActionListener {
                 collection.addRecipe(recipe);
                 recipeModel.addElement(input);
                 activity.setText("Successfully added recipe " + input + "!");
-                playSound("cheeringKidsSoundEffect.wav");
+                playSound(YAY_SOUND_EFFECT_NAME);
             }
             recipeNameField.requestFocusInWindow();
             recipeNameField.setText(emptyString);
@@ -325,7 +326,7 @@ public class RecipeManagerGUI implements ActionListener {
                         + "to save, so the save file now contains no recipes.");
             } else {
                 activity.setText("Recipes saved to file " + RECIPES_GUIFILE);
-                playSound("cheeringKidsSoundEffect.wav");
+                playSound(YAY_SOUND_EFFECT_NAME);
             }
         } catch (FileNotFoundException e) {
             activity.setText("Unable to save recipes to " + RECIPES_GUIFILE);
@@ -342,7 +343,7 @@ public class RecipeManagerGUI implements ActionListener {
             collection = Reader.readRecipes(new File(RECIPES_GUIFILE));
             loadToRecipesList();
             activity.setText("Your recipes have been loaded!");
-            playSound("cheeringKidsSoundEffect.wav");
+            playSound(YAY_SOUND_EFFECT_NAME);
         } catch (IOException e) {
             // do nothing
         }

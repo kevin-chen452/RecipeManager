@@ -15,6 +15,12 @@ import java.util.Scanner;
 // recipe manager application
 public class RecipeManager {
     private static final String RECIPES_FILE = "./data/recipes.txt";
+    private static final String NO_RECIPES_MESSAGE = "Sorry, there are no recipes in the list right now.";
+    private static final String MAIN_MENU_MESSAGE = "Taking you back to the main menu now...";
+    private static final String RECIPE_DNE_MESSAGE = "Sorry, that recipe does not exist.";
+    private static final String STOP_OPERATION_MESSAGE = "done";
+    private static final String POSITIVE_INPUT = "yes";
+    private static final String NEGATIVE_INPUT = "no";
     private Scanner input;
     private Collection collection = new Collection();
 
@@ -28,9 +34,10 @@ public class RecipeManager {
     // EFFECTS: processes user input
     public void runRecipeManager() {
         input = new Scanner(System.in);
-        System.out.println("Would you like to load your previous recipes? (input yes or no)");
+        System.out.println("Would you like to load your previous recipes? (input " + POSITIVE_INPUT + " or "
+                + NEGATIVE_INPUT + ")");
         String decision = input.nextLine();
-        if (decision.equals("yes")) {
+        if (decision.equals(POSITIVE_INPUT)) {
             loadRecipes();
             System.out.println("Your old recipes have been loaded!");
         } else {
@@ -72,7 +79,7 @@ public class RecipeManager {
                         + "to save, so this file now contains no recipes.");
             } else {
                 System.out.println("Recipe" + makePlural(collection.recipeList.size())
-                        +  " saved to file " + RECIPES_FILE);
+                        + " saved to file " + RECIPES_FILE);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Unable to save recipes to " + RECIPES_FILE);
@@ -80,7 +87,7 @@ public class RecipeManager {
             e.printStackTrace();
             // this is due to a programming error
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // EFFECTS: displays menu of options to user
@@ -142,14 +149,14 @@ public class RecipeManager {
         } else {
             System.out.println("Sorry, that's not a valid recipe name.");
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // MODIFIES: this
     // EFFECTS: conducts the removal of a recipe
     private void doRemoveRecipe() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("Enter the name of the recipe you want to remove. Here's a list of known recipes:");
             System.out.println(tryGetRecipeList());
@@ -161,14 +168,14 @@ public class RecipeManager {
                 System.out.println("Recipe not found... sorry");
             }
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // MODIFIES: this
     // EFFECTS: conducts the locating of a recipe
     private void doLocateRecipe() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("Input the name of the recipe you want. Here's a list of known recipes:");
             System.out.println(tryGetRecipeList());
@@ -184,10 +191,10 @@ public class RecipeManager {
                 System.out.println("Instructions (" + recipe.instructions.size() + " step"
                         + makePlural(recipe.instructions.size()) + "):\n" + recipe.getInstructionsList());
             } else {
-                System.out.println("Sorry, that recipe does not exist.");
+                System.out.println(RECIPE_DNE_MESSAGE);
             }
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // EFFECTS: checks if an s needs to be added or not
@@ -203,13 +210,13 @@ public class RecipeManager {
     // EFFECTS: conducts the rating of a recipe
     private void doRecipeRating() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("Select the recipe you want to rate. Here's a list of known recipes:");
             System.out.println(tryGetRecipeList());
             helpDoRecipeRating();
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // MODIFIES: this
@@ -227,7 +234,7 @@ public class RecipeManager {
                 System.out.println("Sorry, that's not a valid rating.");
             }
         } else {
-            System.out.println("Sorry, that recipe does not exist.");
+            System.out.println(RECIPE_DNE_MESSAGE);
         }
     }
 
@@ -235,7 +242,7 @@ public class RecipeManager {
     // EFFECTS: conducts the adding of instructions
     private void doAddInstructions() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe that you want to add instructions for.");
             System.out.println("Here's a list of known recipes:\n" + tryGetRecipeList());
@@ -243,13 +250,14 @@ public class RecipeManager {
             Recipe recipe = collection.getRecipe(name);
             if (recipe != null) {
                 System.out.println("You have chosen recipe " + recipe.recipeName + ". Add a preparation step, or enter"
-                        + " \"done\" if you accidentally clicked this and do not actually want to add instructions.");
+                        + " \"" + STOP_OPERATION_MESSAGE
+                        + "\" if you accidentally clicked this and do not actually want to add instructions.");
                 helpDoAddInstructions(name);
             } else {
-                System.out.println("Sorry, that recipe does not exist.");
+                System.out.println(RECIPE_DNE_MESSAGE);
             }
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // MODIFIES: this
@@ -259,15 +267,15 @@ public class RecipeManager {
         while (done) {
             String step = input.nextLine();
             Recipe recipe = collection.getRecipe(name);
-            if (step.equals("done")) {
+            if (step.equals(STOP_OPERATION_MESSAGE)) {
                 done = false;
                 System.out.println("These are the instructions for this recipe:");
                 System.out.println(recipe.getInstructionsList());
             } else {
                 try {
                     recipe.addInstructions(step);
-                    System.out.println("Preparation step added successfully! Input your next step, or \"done\" "
-                            + "if you are finished.");
+                    System.out.println("Preparation step added successfully! Input your next step, or \""
+                            + STOP_OPERATION_MESSAGE + "\" if you are finished.");
                 } catch (EmptyInstructionsException e) {
                     System.out.println("Please specify a valid preparation step.\n");
                 }
@@ -279,7 +287,7 @@ public class RecipeManager {
     // EFFECTS: does the clearing of instructions for a given recipe
     private void doClearInstructions() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe that you want to remove instructions for.");
             System.out.println("Here's a list of known recipes:\n" + tryGetRecipeList());
@@ -287,34 +295,34 @@ public class RecipeManager {
             Recipe recipe = collection.getRecipe(name);
             if (recipe != null) {
                 System.out.println("You have chosen recipe " + recipe.recipeName + ". Are you sure you want to "
-                        + "clear all instructions? (input \"yes\" or \"no\")");
+                        + "clear all instructions? (input " + POSITIVE_INPUT + " or " + NEGATIVE_INPUT + ")");
                 String decision = input.nextLine();
-                if (decision.equals("yes")) {
+                if (decision.equals(POSITIVE_INPUT)) {
                     recipe.clearInstructions();
                     System.out.println("Instructions for recipe " + recipe.recipeName + " have been successfully "
                             + "cleared.");
-                } else if (decision.equals("no")) {
+                } else if (decision.equals(NEGATIVE_INPUT)) {
                     System.out.println("Instructions for recipe " + recipe.recipeName + " were not cleared.");
                 }
             } else {
-                System.out.println("Sorry, that recipe does not exist.");
+                System.out.println(RECIPE_DNE_MESSAGE);
             }
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // MODIFIES: this
     // EFFECTS: conducts the setting of a recipe's preparation time
     private void doRecipeTime() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe whose time you want to set.");
             System.out.println("Here's a list of known recipes:\n" + tryGetRecipeList());
             String name = input.nextLine();
             helpDoRecipeTime(name);
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // MODIFIES: this
@@ -332,7 +340,7 @@ public class RecipeManager {
                 System.out.println("Sorry, that's not a valid time.");
             }
         } else {
-            System.out.println("Sorry, that recipe does not exist.");
+            System.out.println(RECIPE_DNE_MESSAGE);
         }
     }
 
@@ -340,13 +348,13 @@ public class RecipeManager {
     // EFFECTS: conducts the adding of multiple ingredients to a recipe
     private void doModifyIngredients() {
         if (collection.recipeList.size() == 0) {
-            System.out.println("Sorry, there are no recipes in the list right now.");
+            System.out.println(NO_RECIPES_MESSAGE);
         } else {
             System.out.println("First, input the name of the recipe that you want to add or remove ingredients from.");
             System.out.println("Here's a list of known recipes:\n" + tryGetRecipeList());
             helpChooseIngredientMode();
         }
-        System.out.println("Taking you back to the main menu now...");
+        System.out.println(MAIN_MENU_MESSAGE);
     }
 
     // EFFECTS: helps conduct the user's choice of adding or removing ingredients
@@ -356,7 +364,8 @@ public class RecipeManager {
         if (recipe != null) {
             System.out.println("You have chosen recipe " + recipe.recipeName + ".");
             System.out.println("Enter \"add\" to add ingredients, or \"remove\" to remove ingredients,");
-            System.out.println("or \"done\" if you would like to go back to the main menu.");
+            System.out.println("or \""
+                    + STOP_OPERATION_MESSAGE + "\" if you would like to go back to the main menu.");
             String choice = input.nextLine();
             recipe = collection.getRecipe(name);
             if (choice.equals("add")) {
@@ -366,11 +375,11 @@ public class RecipeManager {
                 System.out.println("You have chosen to remove ingredients. Remove an ingredient.");
                 System.out.println("Here's a list of known ingredients: " + recipe.getIngredientList());
                 helpRemoveIngredients(name);
-            } else if (!choice.equals("done")) {
+            } else if (!choice.equals(STOP_OPERATION_MESSAGE)) {
                 System.out.println("Invalid input.");
             }
         } else {
-            System.out.println("Sorry, that recipe does not exist.");
+            System.out.println(RECIPE_DNE_MESSAGE);
         }
     }
 
@@ -381,15 +390,15 @@ public class RecipeManager {
         while (done) {
             String ingredient = input.nextLine();
             Recipe recipe = collection.getRecipe(name);
-            if (ingredient.equals("done")) {
+            if (ingredient.equals(STOP_OPERATION_MESSAGE)) {
                 done = false;
                 System.out.println("These are the ingredients in this recipe:");
                 System.out.println(recipe.getIngredientList());
             } else {
                 try {
                     recipe.addIngredient(ingredient);
-                    System.out.println("You have added " + ingredient + "! Input your next ingredient, or \"done\" "
-                            + "if you are finished.");
+                    System.out.println("You have added " + ingredient + "! Input your next ingredient, or \""
+                            + STOP_OPERATION_MESSAGE + "\" if you are finished.");
                 } catch (EmptyIngredientException e) {
                     System.out.println("Please specify a valid ingredient.\n");
                 }
@@ -404,15 +413,15 @@ public class RecipeManager {
         while (done) {
             String ingredient = input.nextLine();
             Recipe recipe = collection.getRecipe(name);
-            if (ingredient.equals("done")) {
+            if (ingredient.equals(STOP_OPERATION_MESSAGE)) {
                 done = false;
                 System.out.println("These are the ingredients in this recipe:");
                 System.out.println(recipe.getIngredientList());
             } else {
                 try {
                     recipe.removeIngredient(ingredient);
-                    System.out.println("You have removed " + ingredient + "! Input your next ingredient, or \"done\" "
-                            + "if you are finished.");
+                    System.out.println("You have removed " + ingredient + "! Input your next ingredient, or \""
+                            + STOP_OPERATION_MESSAGE + "\" if you are finished.");
                     System.out.println("These are the remaining ingredients: " + recipe.getIngredientList());
                 } catch (EmptyIngredientException e) {
                     System.out.println("Sorry, there are no more ingredients in this recipe.");
