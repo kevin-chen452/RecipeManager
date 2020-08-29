@@ -43,6 +43,7 @@ public class CollectionTest {
     void testGetRecipeNull() {
         try {
             testCollection.get(0);
+            fail("Should have been thrown.");
         } catch (IndexOutOfBoundsException e) {
         }
     }
@@ -52,6 +53,7 @@ public class CollectionTest {
         try {
             testCollection.addRecipe(testRecipe1);
             testCollection.get(10);
+            fail("Should have been thrown.");
         } catch (IndexOutOfBoundsException e) {
         }
     }
@@ -77,6 +79,7 @@ public class CollectionTest {
     void testGetEmptyRecipeList() {
         try {
             testCollection.getRecipeList();
+            fail("Should have been thrown.");
         } catch (EmptyRecipeListException e) {
         }
     }
@@ -101,6 +104,7 @@ public class CollectionTest {
     void testRemoveRecipeFailEmpty() {
         try {
             testCollection.removeRecipe(testRecipe1.getName());
+            fail("Should have been thrown.");
         } catch (NoRecipeFoundException e) {
         }
     }
@@ -110,6 +114,7 @@ public class CollectionTest {
         testCollection.addRecipe(testRecipe1);
         try {
             testCollection.removeRecipe(testRecipe2.getName());
+            fail("Should have been thrown.");
         } catch (NoRecipeFoundException e) {
         }
     }
@@ -121,6 +126,7 @@ public class CollectionTest {
         testCollection.addRecipe(testRecipe4);
         try {
             testCollection.removeRecipe(testRecipe3.getName());
+            fail("Should have been thrown.");
         } catch (NoRecipeFoundException e) {
         }
     }

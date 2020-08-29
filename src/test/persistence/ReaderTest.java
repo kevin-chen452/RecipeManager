@@ -90,6 +90,7 @@ public class ReaderTest {
     void testIOException() {
         try {
             Reader.readRecipes(new File("./nonexistent/path.txt"));
+            fail("Should have been thrown.");
         } catch (IOException E) {
         }
     }

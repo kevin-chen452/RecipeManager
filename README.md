@@ -77,8 +77,5 @@ and repetition into a single method, so I can modify every single case that the 
 helper method (single point of control). 
 
 
-Side note: for task 3 on the edx page, it says "It is sufficient that you improve two separate problems with the design
-of your code." Here, I've made multiple changes, so my assumption is that these should be sufficient, since I reduced
-coupling in at least two places in my code.
 
 

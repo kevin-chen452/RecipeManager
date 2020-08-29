@@ -43,6 +43,7 @@ public class RecipeTest {
     void testAddInstructionsFail() {
         try {
             testRecipe.addInstructions("");
+            fail("Should have been thrown.");
         } catch (EmptyInstructionsException e) {
         }
     }
@@ -66,10 +67,11 @@ public class RecipeTest {
     }
 
     @Test
-    void testGetInstructionsFail() {
+    void testGetInstructions() {
         try {
             testRecipe.getInstructionsList();
         } catch (NoSuchElementException e) {
+            fail("Should not have been thrown.");
         }
     }
 
@@ -124,6 +126,7 @@ public class RecipeTest {
         assertFalse(testRecipe.ingredients.contains("rice"));
         try {
             testRecipe.addIngredient("");
+            fail("Should have been thrown.");
         } catch (EmptyIngredientException e) {
         }
         assertFalse(testRecipe.ingredients.contains("rice"));
@@ -173,6 +176,7 @@ public class RecipeTest {
         try {
             assertFalse(testRecipe.ingredients.contains("rice"));
             testRecipe.removeIngredient("rice");
+            fail("Should have been thrown.");
         } catch (NoIngredientFoundException e) {
             fail();
         } catch (EmptyIngredientException e) {
@@ -185,6 +189,7 @@ public class RecipeTest {
         try {
             testRecipe.addIngredient("rice");
             testRecipe.removeIngredient("noodles");
+            fail("Should have been thrown.");
         } catch (NoIngredientFoundException e) {
         } catch (EmptyIngredientException e) {
             fail();
@@ -216,6 +221,7 @@ public class RecipeTest {
     void testSetCookingTimeFail() {
         try {
             testRecipe.setCookingTime(0);
+            fail("Should have been thrown.");
         } catch (IllegalTimeException e) {
         }
     }
@@ -244,6 +250,7 @@ public class RecipeTest {
     void testSetRatingFailUpper() {
         try {
             testRecipe.setRating(6);
+            fail("Should have been thrown.");
         } catch (IllegalRateException e) {
         }
     }
@@ -252,6 +259,7 @@ public class RecipeTest {
     void testSetRatingFailLower() {
         try {
             testRecipe.setRating(0);
+            fail("Should have been thrown.");
         } catch (IllegalRateException e) {
         }
     }
