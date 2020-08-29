@@ -3,7 +3,7 @@
 ## Kevin Chen
 
 This application will launch an application that allows the user to keep track of their recipes. They will be able to 
-do things such as adding and removing recipes, viewing their current recipes, and much more. 
+do things such as adding and removing recipes, viewing their current recipes, adding ingredients and much more. 
 
 There are many audiences in mind, but generally. I think that these people will use it:
 - people who enjoy cooking
